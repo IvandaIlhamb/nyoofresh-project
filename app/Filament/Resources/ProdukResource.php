@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\ImageColumn;
+
 
 class ProdukResource extends Resource
 {
@@ -26,22 +28,26 @@ class ProdukResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('lapak')
-                ->options([
-                    'lapak_nyoofresh' => 'Nyoofresh',
-                    'Diluar_nyoofresh' => 'Diluar Nyooresh',
-                ])
-                ->label('Jenis Lapak')
-                ->required(),
-                // Forms\Components\TextInput::make('Jenis Lapak'),
-                Forms\Components\TextInput::make('Nama Produk')
-                ->label('Nama Produk')
-                ->required(),
-                Forms\Components\TextArea::make('Deskripsi'),
-                Forms\Components\TextInput::make('Harga Kulak')
-                ->numeric()
-                ->prefix('Rp')
-                ->maxValue(42949672.95),
-                FileUpload::make('Upload Foto')
+                    ->options([
+                        'Lapak Nyoofresh' => 'Lapak Nyoofresh',
+                        'Diluar Nyoofresh' => 'Diluar Nyoofresh',
+                    ])
+                    ->native(false)
+                    ->label('Jenis Lapak')
+                    ->required(),
+                Forms\Components\TextInput::make('nama_produk')
+                    ->label('Nama Produk')
+                    ->required(),
+                Forms\Components\TextArea::make('deskripsi')
+                    ->label('Deskripsi Produk'),
+                Forms\Components\TextInput::make('harga_kulak')
+                    ->label('Harga Kulak')
+                    ->numeric()
+                    ->prefix('Rp')
+                    ->maxValue(42949672.95),
+                Forms\Components\FileUpload::make('foto_produk')
+                    ->label('Foto Produk')
+                    ->image()
             ]);
     }
 
@@ -49,7 +55,20 @@ class ProdukResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('lapak')
+                    ->numeric(),
+                Tables\Columns\TextColumn::make('nama_produk')
+                    ->label('Nama Produk'),
+                Tables\Columns\TextColumn::make('deskripsi')
+                    ->label('Deskripsi Produk')
+                    ->limit(50),
+                Tables\Columns\TextColumn::make('harga_kulak')
+                    ->label('Harga Kulak')
+                    ->numeric()
+                    ->money('IDR', locale: 'id')
+                    ->sortable(),
+                Tables\Columns\ImageColumn::make('foto_produk')
+                    ->label('Foto Produk')
             ])
             ->filters([
                 //
