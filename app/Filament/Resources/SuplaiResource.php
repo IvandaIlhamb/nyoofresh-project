@@ -15,6 +15,7 @@ use App\Filament\Resources\SuplaiResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SuplaiResource\RelationManagers;
 use Filament\Forms\Components\Select;
+use Carbon\Carbon;
 
 
 class SuplaiResource extends Resource
@@ -28,18 +29,19 @@ class SuplaiResource extends Resource
         return $form
             ->schema([
                 Forms\Components\DatePicker::make('tanggal')
-                    ->format('Y-m-d')
+                    ->default(Carbon::now()->format('d-m-Y'))
                     ->label('Tanggal')
                     ->required(),
                 Forms\Components\Select::make('produk_id')
                     ->relationship('produk', 'nama_produk')
                     ->label('Nama Produk')
+                    ->native(false)
                     ->required(),
                 //  ->searchable()
                 Forms\Components\TextInput::make('jumlah_suplai')
-                 ->numeric()
-                 ->label('Jumlah Produk')
-                 ->required(),
+                    ->numeric()
+                    ->label('Jumlah Produk')
+                    ->required(),
             ]);
     }
 
@@ -48,12 +50,11 @@ class SuplaiResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal')
-                    ->numeric()
+                    ->getStateUsing(fn ($record) => Carbon::parse($record->tanggal_pengeluaran)->format('d-m-Y'))
                     ->label('Tanggal'),
                 Tables\Columns\TextColumn::make('produk.nama_produk')
                     ->label('Nama Produk'),
                 Tables\Columns\TextColumn::make('jumlah_suplai')
-                    ->numeric()
                     ->label('Nama Produk'),
             ])
             ->filters([
@@ -61,6 +62,7 @@ class SuplaiResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

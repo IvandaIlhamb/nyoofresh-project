@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Carbon\Carbon;
 
 class PengeluaranResource extends Resource
 {
@@ -24,7 +25,7 @@ class PengeluaranResource extends Resource
         return $form
             ->schema([
                 Forms\Components\DatePicker::make('tanggal_pengeluaran')
-                    ->format('Y-m-d')
+                    ->default(Carbon::now()->format('d-m-Y'))
                     ->label('Tanggal Pengeluaran')
                     ->required(),
                 Forms\Components\TextInput::make('keperluan')
@@ -41,13 +42,20 @@ class PengeluaranResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('tanggal_pengeluaran')
+                    ->default(Carbon::now()->format('d-m-Y'))
+                    ->getStateUsing(fn ($record) => Carbon::parse($record->tanggal_pengeluaran)->format('d-m-Y')),
+                Tables\Columns\TextColumn::make('keperluan')
+                    ->label('Nama Produk'),
+                Tables\Columns\TextColumn::make('jumlah_keperluan')
+                    ->label('Nama Produk'),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
