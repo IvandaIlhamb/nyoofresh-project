@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('produks', function (Blueprint $table) {
             $table->id(); // Primary key
             $table->string('lapak')->default('default_value'); // Kolom untuk pilihan lapak
-            $table->string('nama_produk'); // Nama produk
+            $table->string('nama_produk')->default('Nama Produk Default'); // Nama produk
             $table->text('deskripsi')->nullable(); // Deskripsi produk (opsional)
             $table->decimal('harga_kulak', 10, 2); // Harga kulak dengan format desimal
             $table->string('foto_produk')->nullable(); // URL atau path ke foto produk (opsional)
