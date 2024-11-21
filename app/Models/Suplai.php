@@ -18,8 +18,8 @@ class Suplai extends Model
         'jumlah_suplai'
     ];
 
-    public function produk(): HasMany
+    public function produk(): BelongsTo
     {
-        return $this->hasMany(Produk::class);
+        return $this->belongsTo(Produk::class, 'produk_id');
     }
 }

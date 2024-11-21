@@ -50,7 +50,7 @@ class SuplaiResource extends Resource
                 Tables\Columns\TextColumn::make('tanggal')
                     ->numeric()
                     ->label('Tanggal'),
-                Tables\Columns\TextColumn::make('suplai.nama_produk')
+                Tables\Columns\TextColumn::make('produk.nama_produk')
                     ->label('Nama Produk'),
                 Tables\Columns\TextColumn::make('jumlah_suplai')
                     ->numeric()

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory; // Impor HasFactory
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 
 class Produk extends Model
@@ -18,8 +19,8 @@ class Produk extends Model
         'harga_kulak',
         'foto_produk'
     ];
-    public function suplai(): BelongsTo
+    public function suplai(): HasMany
     {
-        return $this->belongsTo(Produk::class, 'produk_id');
+        return $this->hasMany(Suplai::class);
     }
 }
