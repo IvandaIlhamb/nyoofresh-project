@@ -28,13 +28,13 @@ class SuplaiResource extends Resource
         return $form
             ->schema([
                 Forms\Components\DatePicker::make('tanggal')
-                ->format('d/m/Y')
-                ->label('Tanggal')
-                ->required(),
-                Forms\Components\Select::make('suplai_produk')
-                 ->relationship('Produk', 'nama_produk')
-                 ->label('Nama Produk')
-                 ->required(),
+                    ->format('Y-m-d')
+                    ->label('Tanggal')
+                    ->required(),
+                Forms\Components\Select::make('produk_id')
+                    ->relationship('produk', 'nama_produk')
+                    ->label('Nama Produk')
+                    ->required(),
                 //  ->searchable()
                 Forms\Components\TextInput::make('jumlah_suplai')
                  ->numeric()
