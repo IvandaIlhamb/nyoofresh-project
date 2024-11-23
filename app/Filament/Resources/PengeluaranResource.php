@@ -48,7 +48,7 @@ class PengeluaranResource extends Resource
                 Tables\Columns\TextColumn::make('keperluan')
                     ->label('Nama Produk'),
                 Tables\Columns\TextColumn::make('jumlah_keperluan')
-                    ->label('Nama Produk'),
+                    ->label('Jumlah Keperluan'),
             ])
             ->filters([
                 //
