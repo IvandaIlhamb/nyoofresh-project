@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id(); // Primary key
             $table->date('tanggal'); // Kolom untuk menyimpan tanggal suplai
             $table->foreignId('nama_produk')->constrained('produks')->onDelete('cascade'); // Relasi ke tabel 'produks'
-            $table->numeric('jumlah_suplai'); // Kolom untuk jumlah suplai
+            $table->integer('jumlah_suplai'); // Kolom untuk jumlah suplai
             $table->timestamps(); // Kolom created_at dan updated_at
         });
     }

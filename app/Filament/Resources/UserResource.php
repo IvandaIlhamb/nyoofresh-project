@@ -32,16 +32,21 @@ class UserResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
+                // Forms\Components\DateTimePicker::make('email_verified_at'),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->revealable()
                     ->required(fn () => request()->routeIs('filamin.users.create'))
                     ->maxLength(255),
-                Select::make('roles')
-                    ->relationship(name: 'roles', titleAttribute: 'name')
+                Forms\Components\Select::make('roles')
+                    // ->relationship(name: 'roles', titleAttribute: 'name')
+                    ->options([
+                        'Admin' => 'Admin',
+                        'Suplaier' => 'Suplaier',
+                        'Penjual' => 'Penjual',
+                    ])
                     ->searchable()
-                    ->multiple()
+                    // ->multiple()
                     ->preload()
             ]);
     }
@@ -53,6 +58,8 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('roles')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
