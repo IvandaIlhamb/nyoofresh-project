@@ -39,14 +39,14 @@ class UserResource extends Resource
                     ->required(fn () => request()->routeIs('filamin.users.create'))
                     ->maxLength(255),
                 Forms\Components\Select::make('roles')
-                    // ->relationship(name: 'roles', titleAttribute: 'name')
-                    ->options([
-                        'Admin' => 'Admin',
-                        'Suplaier' => 'Suplaier',
-                        'Penjual' => 'Penjual',
-                    ])
+                    ->relationship(name: 'roles', titleAttribute: 'name')
+                    // ->options([
+                    //     'Admin' => 'Admin',
+                    //     'Suplaier' => 'Suplaier',
+                    //     'Penjual' => 'Penjual',
+                    // ])
                     ->searchable()
-                    // ->multiple()
+                    ->multiple()
                     ->preload()
             ]);
     }

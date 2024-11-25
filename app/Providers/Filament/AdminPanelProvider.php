@@ -18,7 +18,21 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
- 
+use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource;
+use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource;
+use App\Filament\Pages\HomePageSettings;
+use App\Filament\Resources\CategoryResource;
+use App\Filament\Resources\GajiModalPengeluaranResource;
+use App\Filament\Resources\MonitoringRekapDroppingResource;
+use App\Filament\Resources\MonitoringRekapLapakNyoofreshResource;
+use App\Filament\Resources\PemasukanResource;
+use App\Filament\Resources\ProdukResource;
+use App\Filament\Resources\UserResource;
+use Filament\Navigation\NavigationBuilder;
+use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
+use Filament\Pages\Dashboard;
+
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -56,6 +70,45 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->plugin(FilamentSpatieRolesPermissionsPlugin::make());
+            ->plugin(FilamentSpatieRolesPermissionsPlugin::make())
+            ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
+                return $builder
+                    // Tambahkan item Dashboard di atas semua grup navigasi
+                    ->items([
+                        NavigationItem::make('Dashboard')
+                            ->icon('heroicon-o-home')
+                            ->isActiveWhen(fn(): bool => request()->routeIs('filament.admin.pages.dashboard'))
+                            ->url(fn(): string => route('filament.admin.pages.dashboard')),
+                    ])
+                    ->groups([
+                        NavigationGroup::make('Ini Fitur')
+                            ->items([
+                                ...UserResource::getNavigationItems(),
+                                ...ProdukResource::getNavigationItems(),
+                                ...GajiModalPengeluaranResource::getNavigationItems(),
+                                ...PemasukanResource::getNavigationItems(),
+                                ...MonitoringRekapDroppingResource::getNavigationItems(),
+                                ...MonitoringRekapLapakNyoofreshResource::getNavigationItems(),
+                                NavigationItem::make('Role')
+                                    ->icon('heroicon-o-user-group')
+                                    ->isActiveWhen(fn(): bool => request()->routeIs([
+                                        'filament.admin.resources.role.index',
+                                        'filament.admin.resources.role.create',
+                                        'filament.admin.resources.role.view',
+                                        'filament.admin.resources.role.edit',
+                                    ]))
+                                    ->url(fn():string=> '/admin/roles'),
+                                NavigationItem::make('Permission')
+                                    ->icon('heroicon-o-lock-closed')
+                                    ->isActiveWhen(fn(): bool => request()->routeIs([
+                                        'filament.admin.resources.permission.index',
+                                        'filament.admin.resources.permission.create',
+                                        'filament.admin.resources.permission.view',
+                                        'filament.admin.resources.permission.edit',
+                                    ]))
+                                    ->url(fn():string=> '/admin/permissions'),
+                            ]),
+                    ]);
+            });
     }
 }
