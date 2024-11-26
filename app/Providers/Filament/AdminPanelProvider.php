@@ -81,14 +81,20 @@ class AdminPanelProvider extends PanelProvider
                             ->url(fn(): string => route('filament.admin.pages.dashboard')),
                     ])
                     ->groups([
-                        NavigationGroup::make('Ini Fitur')
+                        NavigationGroup::make('Lapak')
                             ->items([
-                                ...UserResource::getNavigationItems(),
                                 ...ProdukResource::getNavigationItems(),
-                                ...GajiModalPengeluaranResource::getNavigationItems(),
-                                ...PemasukanResource::getNavigationItems(),
                                 ...MonitoringRekapDroppingResource::getNavigationItems(),
                                 ...MonitoringRekapLapakNyoofreshResource::getNavigationItems(),
+                            ]),
+                        NavigationGroup::make('Keuangan')
+                            ->items([
+                                ...GajiModalPengeluaranResource::getNavigationItems(),
+                                ...PemasukanResource::getNavigationItems(),
+                                ]),
+                        NavigationGroup::make('Setting')
+                            ->items([
+                                ...UserResource::getNavigationItems(),
                                 NavigationItem::make('Role')
                                     ->icon('heroicon-o-user-group')
                                     ->isActiveWhen(fn(): bool => request()->routeIs([
@@ -107,7 +113,7 @@ class AdminPanelProvider extends PanelProvider
                                         'filament.admin.resources.permission.edit',
                                     ]))
                                     ->url(fn():string=> '/admin/permissions'),
-                            ]),
+                        ]),
                     ]);
             });
     }
