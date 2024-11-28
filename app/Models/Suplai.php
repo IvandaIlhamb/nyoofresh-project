@@ -13,13 +13,13 @@ class Suplai extends Model
     use HasFactory;
     protected $fillable = [
         'tanggal', 
-        'produk_id',
+        // 'produk_id',
         'nama_produk', 
         'jumlah_suplai'
     ];
 
     public function produk(): BelongsTo
     {
-        return $this->belongsTo(Produk::class, 'produk_id');
+        return $this->belongsTo(Produk::class, 'nama_produk');
     }
 }

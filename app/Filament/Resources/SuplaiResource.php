@@ -50,7 +50,7 @@ class SuplaiResource extends Resource
                     ->default(Carbon::now()->format('d-m-Y'))
                     ->label('Tanggal')
                     ->required(),
-                Forms\Components\Select::make('produk_id')
+                Forms\Components\Select::make('nama_produk')
                     ->relationship('produk', 'nama_produk')
                     ->label('Nama Produk')
                     ->native(false)
