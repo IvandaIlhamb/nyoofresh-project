@@ -73,7 +73,7 @@ class SuplaiResource extends Resource
                 Tables\Columns\TextColumn::make('produk.nama_produk')
                     ->label('Nama Produk'),
                 Tables\Columns\TextColumn::make('jumlah_suplai')
-                    ->label('Nama Produk'),
+                    ->label('Jumlah Suplai'),
             ])
             ->filters([
                 //
