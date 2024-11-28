@@ -24,6 +24,24 @@ class SuplaiResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    // ----------hidden suplai jika tidak memiliki akses
+    public static function shouldRegisterNavigation(): bool
+    {
+        if(auth()->user()->can('suplai'))
+            return true;
+        else
+            return false;
+    }
+
+    // ----------hidden akses url /suplai jika tidak memiliki akses
+    public static function canViewAny(): bool
+    {
+        if(auth()->user()->can('suplai'))
+            return true;
+        else
+            return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

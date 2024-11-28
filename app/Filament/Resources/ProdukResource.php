@@ -23,6 +23,24 @@ class ProdukResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    // ----------hidden produk jika tidak memiliki akses
+    public static function shouldRegisterNavigation(): bool
+    {
+        if(auth()->user()->can('produk'))
+            return true;
+        else
+            return false;
+    }
+
+    // ----------hidden akses url /produk jika tidak memiliki akses
+    public static function canViewAny(): bool
+    {
+        if(auth()->user()->can('produk'))
+            return true;
+        else
+            return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

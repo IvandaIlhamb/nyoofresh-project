@@ -22,11 +22,16 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource;
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource;
 use App\Filament\Pages\HomePageSettings;
 use App\Filament\Resources\CategoryResource;
+use App\Filament\Resources\DroppingResource;
 use App\Filament\Resources\GajiModalPengeluaranResource;
+use App\Filament\Resources\HasilPenjualanResource;
 use App\Filament\Resources\MonitoringRekapDroppingResource;
 use App\Filament\Resources\MonitoringRekapLapakNyoofreshResource;
 use App\Filament\Resources\PemasukanResource;
+use App\Filament\Resources\PengeluaranResource;
 use App\Filament\Resources\ProdukResource;
+use App\Filament\Resources\RekapPenjualanResource;
+use App\Filament\Resources\SuplaiResource;
 use App\Filament\Resources\UserResource;
 use Filament\Navigation\NavigationBuilder;
 use Filament\Navigation\NavigationGroup;
@@ -81,39 +86,65 @@ class AdminPanelProvider extends PanelProvider
                             ->url(fn(): string => route('filament.admin.pages.dashboard')),
                     ])
                     ->groups([
+                        ...(!auth()->user()->hasRole('admin')  
+                        ? [
                         NavigationGroup::make('Lapak')
                             ->items([
                                 ...ProdukResource::getNavigationItems(),
                                 ...MonitoringRekapDroppingResource::getNavigationItems(),
                                 ...MonitoringRekapLapakNyoofreshResource::getNavigationItems(),
+                                ...DroppingResource::getNavigationItems(),
+                                ...HasilPenjualanResource::getNavigationItems(),
+                                ...RekapPenjualanResource::getNavigationItems(),
+                                ...SuplaiResource::getNavigationItems(),
                             ]),
                         NavigationGroup::make('Keuangan')
                             ->items([
                                 ...GajiModalPengeluaranResource::getNavigationItems(),
                                 ...PemasukanResource::getNavigationItems(),
-                                ]),
-                        NavigationGroup::make('Setting')
+                                ...PengeluaranResource::getNavigationItems(),
+                            ]),
+                        ]
+                        : [
+                            NavigationGroup::make('Lapak')
                             ->items([
-                                ...UserResource::getNavigationItems(),
-                                NavigationItem::make('Role')
-                                    ->icon('heroicon-o-user-group')
-                                    ->isActiveWhen(fn(): bool => request()->routeIs([
-                                        'filament.admin.resources.role.index',
-                                        'filament.admin.resources.role.create',
-                                        'filament.admin.resources.role.view',
-                                        'filament.admin.resources.role.edit',
-                                    ]))
-                                    ->url(fn():string=> '/admin/roles'),
-                                NavigationItem::make('Permission')
-                                    ->icon('heroicon-o-lock-closed')
-                                    ->isActiveWhen(fn(): bool => request()->routeIs([
-                                        'filament.admin.resources.permission.index',
-                                        'filament.admin.resources.permission.create',
-                                        'filament.admin.resources.permission.view',
-                                        'filament.admin.resources.permission.edit',
-                                    ]))
-                                    ->url(fn():string=> '/admin/permissions'),
-                        ]),
+                                ...ProdukResource::getNavigationItems(),
+                                ...MonitoringRekapDroppingResource::getNavigationItems(),
+                                ...MonitoringRekapLapakNyoofreshResource::getNavigationItems(),
+                                ...DroppingResource::getNavigationItems(),
+                                ...HasilPenjualanResource::getNavigationItems(),
+                                ...RekapPenjualanResource::getNavigationItems(),
+                                ...SuplaiResource::getNavigationItems(),
+                            ]),
+                            NavigationGroup::make('Keuangan')
+                                ->items([
+                                    ...GajiModalPengeluaranResource::getNavigationItems(),
+                                    ...PemasukanResource::getNavigationItems(),
+                                    ...PengeluaranResource::getNavigationItems(),
+                                ]),       
+                            NavigationGroup::make('Setting')
+                                ->items([
+                                    ...UserResource::getNavigationItems(),
+                                    NavigationItem::make('Role')
+                                        ->icon('heroicon-o-user-group')
+                                        ->isActiveWhen(fn(): bool => request()->routeIs([
+                                            'filament.admin.resources.role.index',
+                                            'filament.admin.resources.role.create',
+                                            'filament.admin.resources.role.view',
+                                            'filament.admin.resources.role.edit',
+                                        ]))
+                                        ->url(fn():string=> '/admin/roles'),
+                                    NavigationItem::make('Permission')
+                                        ->icon('heroicon-o-lock-closed')
+                                        ->isActiveWhen(fn(): bool => request()->routeIs([
+                                            'filament.admin.resources.permission.index',
+                                            'filament.admin.resources.permission.create',
+                                            'filament.admin.resources.permission.view',
+                                            'filament.admin.resources.permission.edit',
+                                        ]))
+                                        ->url(fn():string=> '/admin/permissions'),
+                                ]),
+                            ])
                     ]);
             });
     }

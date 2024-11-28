@@ -20,6 +20,24 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    // ----------hidden user jika tidak memiliki akses
+    public static function shouldRegisterNavigation(): bool
+    {
+        if(auth()->user()->can('user'))
+            return true;
+        else
+            return false;
+    }
+
+    // ----------hidden akses url /user jika tidak memiliki akses
+    public static function canViewAny(): bool
+    {
+        if(auth()->user()->can('user'))
+            return true;
+        else
+            return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -59,11 +77,11 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('roles')
+                Tables\Columns\TextColumn::make('roles.name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('email_verified_at')
+                //     ->dateTime()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

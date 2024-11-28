@@ -19,6 +19,24 @@ class MonitoringRekapDroppingResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    // ----------hidden monitoring rekap dropping jika tidak memiliki akses
+    public static function shouldRegisterNavigation(): bool
+    {
+        if(auth()->user()->can('monitoringrekapdropping'))
+            return true;
+        else
+            return false;
+    }
+
+    // ----------hidden akses url /monitoringrekapdropping jika tidak memiliki akses
+    public static function canViewAny(): bool
+    {
+        if(auth()->user()->can('monitoringrekapdropping'))
+            return true;
+        else
+            return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

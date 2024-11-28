@@ -15,18 +15,20 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
         // ------admin or super user
-        Permission::create(['name'=>'add-user']);
-        Permission::create(['name'=>'edit-user']);
-        Permission::create(['name'=>'delete-user']);
-        Permission::create(['name'=>'show-user']);
+        Permission::create(['name'=>'user']);
+        Permission::create(['name'=>'monitoringrekapdropping']);
+        Permission::create(['name'=>'monitoringrekaplapak']);
+        Permission::create(['name'=>'suplai']);
+        Permission::create(['name'=>'gajimodalpengeluaran']);
+        Permission::create(['name'=>'pemasukan']);
 
         // ------supplier
-        Permission::create(['name'=>'add-produk']);
-        Permission::create(['name'=>'salling-recap']);
-        Permission::create(['name'=>'daily-suply']);
+        Permission::create(['name'=>'produk']);
+        Permission::create(['name'=>'rekappenjualan']);
+        Permission::create(['name'=>'suplaiharian']);
 
         // ------penjaga lapak
-        Permission::create(['name'=>'hasil-penjualan']);
+        Permission::create(['name'=>'hasilpenjualan']);
         Permission::create(['name'=>'pengeluaran']);
         // ------dropping
         Permission::create(['name'=>'dropping']);
@@ -38,22 +40,26 @@ class RolePermissionSeeder extends Seeder
         Role::create(['name'=>'dropping']);
 
         $roleAdmin = Role::findByName('admin');
-        $roleAdmin->givePermissionTo('add-user');
-        $roleAdmin->givePermissionTo('edit-user');
-        $roleAdmin->givePermissionTo('delete-user');
-        $roleAdmin->givePermissionTo('show-user');
+        $roleAdmin->givePermissionTo('user');
+        $roleAdmin->givePermissionTo('produk');
+        $roleAdmin->givePermissionTo('monitoringrekapdropping');
+        $roleAdmin->givePermissionTo('monitoringrekaplapak');
+        $roleAdmin->givePermissionTo('suplai');
+        $roleAdmin->givePermissionTo('gajimodalpengeluaran');
+        $roleAdmin->givePermissionTo('pemasukan');
+
 
         $roleSupplier = Role::findByName('supplier');
-        $roleSupplier->givePermissionTo('add-produk');
-        $roleSupplier->givePermissionTo('salling-recap');
-        $roleSupplier->givePermissionTo('daily-suply');
+        $roleSupplier->givePermissionTo('produk');
+        $roleSupplier->givePermissionTo('rekappenjualan');
+        $roleSupplier->givePermissionTo('suplai');
 
         $rolePenjaga = Role::findByName('penjaga lapak');
-        $rolePenjaga->givePermissionTo('hasil-penjualan');
+        $rolePenjaga->givePermissionTo('hasilpenjualan');
         $rolePenjaga->givePermissionTo('pengeluaran');
 
         $roleDropping = Role::findByName('dropping');
-        $roleDropping->givePermissionTo('hasil-penjualan');
+        $roleDropping->givePermissionTo('hasilpenjualan');
         $roleDropping->givePermissionTo('pengeluaran');
         $roleDropping->givePermissionTo('dropping');
     }

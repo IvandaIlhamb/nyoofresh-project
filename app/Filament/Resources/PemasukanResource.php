@@ -19,6 +19,24 @@ class PemasukanResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    // ----------hidden pemasukan jika tidak memiliki akses
+    public static function shouldRegisterNavigation(): bool
+    {
+        if(auth()->user()->can('pemasukan'))
+            return true;
+        else
+            return false;
+    }
+
+    // ----------hidden akses url /pemasukan jika tidak memiliki akses
+    public static function canViewAny(): bool
+    {
+        if(auth()->user()->can('pemasukan'))
+            return true;
+        else
+            return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

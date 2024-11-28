@@ -19,6 +19,24 @@ class GajiModalPengeluaranResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    // ----------hidden gajimodalpengeluaran jika tidak memiliki akses
+    public static function shouldRegisterNavigation(): bool
+    {
+        if(auth()->user()->can('gajimodalpengeluaran'))
+            return true;
+        else
+            return false;
+    }
+
+    // ----------hidden akses url /gajimodalpengeluaran jika tidak memiliki akses
+    public static function canViewAny(): bool
+    {
+        if(auth()->user()->can('gajimodalpengeluaran'))
+            return true;
+        else
+            return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
