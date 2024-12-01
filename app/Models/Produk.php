@@ -17,6 +17,7 @@ class Produk extends Model
         'nama_produk',
         'deskripsi',
         'harga_kulak',
+        'harga_jual',
         'foto_produk'
     ];
     public function suplai(): HasMany

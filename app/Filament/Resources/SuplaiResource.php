@@ -54,12 +54,24 @@ class SuplaiResource extends Resource
                     ->relationship('produk', 'nama_produk')
                     ->label('Nama Produk')
                     ->native(false)
+                    // ->reactive()
                     ->required(),
                 //  ->searchable()
                 Forms\Components\TextInput::make('jumlah_suplai')
                     ->numeric()
                     ->label('Jumlah Produk')
+                    // ->reactive()
                     ->required(),
+                // Forms\Components\Toggle::make('libur')
+                //     ->default(false)
+                //     ->reactive()
+                //     ->afterStateUpdated(function ($state, callable $set) {
+                //         if ($state) {
+                //             $set('nama_produk', null);
+                //             $set('jumlah_suplai', 0);
+                //         }
+                //     })
+                //     ->label('Libur'),
             ]);
     }
 

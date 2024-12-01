@@ -63,6 +63,11 @@ class ProdukResource extends Resource
                     ->numeric()
                     ->prefix('Rp')
                     ->maxValue(42949672.95),
+                Forms\Components\TextInput::make('harga_jual')
+                    ->label('Harga Jual')
+                    ->numeric()
+                    ->prefix('Rp')
+                    ->maxValue(42949672.95),
                 Forms\Components\FileUpload::make('foto_produk')
                     ->label('Foto Produk')
                     ->image()
@@ -82,6 +87,11 @@ class ProdukResource extends Resource
                     ->limit(50),
                 Tables\Columns\TextColumn::make('harga_kulak')
                     ->label('Harga Kulak')
+                    ->numeric()
+                    ->money('IDR', locale: 'id')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('harga_jual')
+                    ->label('Harga Jual')
                     ->numeric()
                     ->money('IDR', locale: 'id')
                     ->sortable(),

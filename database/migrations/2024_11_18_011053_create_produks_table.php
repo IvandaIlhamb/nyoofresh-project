@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nama_produk')->default('Nama Produk Default'); // Nama produk
             $table->text('deskripsi')->nullable(); // Deskripsi produk (opsional)
             $table->decimal('harga_kulak', 10, 2); // Harga kulak dengan format desimal
+            $table->decimal('harga_jual', 10, 2); // Harga jual dengan format desimal
             $table->string('foto_produk')->nullable(); // URL atau path ke foto produk (opsional)
             $table->timestamps(); // Kolom created_at dan updated_at
         });
