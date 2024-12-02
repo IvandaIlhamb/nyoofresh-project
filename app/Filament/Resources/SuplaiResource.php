@@ -80,7 +80,9 @@ class SuplaiResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal')
-                    ->getStateUsing(fn ($record) => Carbon::parse($record->tanggal_pengeluaran)->format('d-m-Y'))
+                    ->getStateUsing(fn ($record) => 
+                        $record->tanggal ? \Carbon\Carbon::parse($record->tanggal)->format('d-m-Y') : null 
+                        )
                     ->label('Tanggal'),
                 Tables\Columns\TextColumn::make('produk.nama_produk')
                     ->label('Nama Produk'),
