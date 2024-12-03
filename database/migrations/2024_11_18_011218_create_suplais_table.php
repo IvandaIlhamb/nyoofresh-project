@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('suplais', function (Blueprint $table) {
             $table->id(); // Primary key
             $table->date('tanggal'); // Kolom untuk menyimpan tanggal suplai
+            $table->enum('status', ['Buka', 'Tutup'])->default('Buka');
             $table->foreignId('nama_produk')->constrained('produks')->onDelete('cascade'); // Relasi ke tabel 'produks'
             $table->integer('jumlah_suplai'); // Kolom untuk jumlah suplai
             $table->timestamps(); // Kolom created_at dan updated_at

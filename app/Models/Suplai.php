@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatusToko;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,11 +16,17 @@ class Suplai extends Model
         'tanggal', 
         // 'produk_id',
         'nama_produk', 
+        'status',
         'jumlah_suplai'
+    ];
+
+    protected $casts = [
+        'status' => StatusToko::class
     ];
 
     public function produk(): BelongsTo
     {
         return $this->belongsTo(Produk::class, 'nama_produk');
     }
+    
 }
