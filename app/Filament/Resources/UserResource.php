@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\Suplai;
 
 class UserResource extends Resource
 {
@@ -58,17 +59,12 @@ class UserResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Select::make('roles')
                     ->relationship(name: 'roles', titleAttribute: 'name')
-                    // ->options([
-                    //     'Admin' => 'Admin',
-                    //     'Suplaier' => 'Suplaier',
-                    //     'Penjual' => 'Penjual',
-                    // ])
                     ->searchable()
                     ->multiple()
-                    ->preload()
-            ]);
-    }
-
+                    ->preload(),
+                ]);
+            }
+            
     public static function table(Table $table): Table
     {
         return $table

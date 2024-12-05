@@ -16,7 +16,10 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SuplaiResource\RelationManagers;
 use Filament\Forms\Components\Select;
 use Carbon\Carbon;
-
+use App\Enums\StatusToko;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class SuplaiResource extends Resource
 {
@@ -25,72 +28,131 @@ class SuplaiResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     // ----------hidden suplai jika tidak memiliki akses
-    public static function shouldRegisterNavigation(): bool
-    {
-        if(auth()->user()->can('suplai'))
-            return true;
-        else
-            return false;
-    }
+    // public static function shouldRegisterNavigation(): bool
+    // {
+        // if(auth()->user()->can('suplai'))
+        //     return true;
+        // else
+        //     return false;
+    // }
 
     // ----------hidden akses url /suplai jika tidak memiliki akses
-    public static function canViewAny(): bool
+    // public static function canViewAny(): bool
+    // {
+    //     if(auth()->user()->can('suplai'))
+    //         return true;
+    //     else
+    //         return false;
+    // }
+    // Membatasi akses untuk membuat user
+    public static function canCreate(): bool
     {
-        if(auth()->user()->can('suplai'))
+        if(auth()->user()->can('create-suplai'))
             return true;
         else
             return false;
     }
 
+    // Membatasi akses untuk mengedit user
+    public static function canEdit($record): bool
+    {
+        if(auth()->user()->can('edit-suplai'))
+            return true;
+        else
+            return false;
+    }
+
+    // Membatasi akses untuk menghapus user
+    public static function canDelete($record): bool
+    {
+        if(auth()->user()->can('delete-suplai'))
+            return true;
+        else
+            return false;
+    }
+    public static function canView($record): bool
+    {
+        if(auth()->user()->can('view-suplai'))
+            return true;
+        else
+            return false;
+    }
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                Forms\Components\Select::make('status')
+                    ->options(StatusToko::class)
+                    ->native(false)
+                    ->default(StatusToko::Tutup)
+                    ->label('Status Toko')
+                    ->required()
+                    ->reactive(),
                 Forms\Components\DatePicker::make('tanggal')
                     ->default(Carbon::now()->format('d-m-Y'))
                     ->label('Tanggal')
                     ->required(),
-                Forms\Components\Select::make('nama_produk')
+                    // ->readOnly(fn (callable $get) => $get('status') !== StatusToko::Buka),
+                Forms\Components\TextInput::make('nama_supplier')
+                    ->label('Nama Supplier')
+                    ->required()
+                    ->default(auth()->user()->name)
+                    ->readonly()
+                    ->extraAttributes([
+                        'style' => 'background-color: #f0f0f0; color: #888; cursor: not-allowed;',  
+                    ]),
+                Forms\Components\Select::make('id_produk')
                     ->relationship('produk', 'nama_produk')
+                    ->placeholder('Tidak Ada Suplai Produk')
                     ->label('Nama Produk')
-                    ->native(false)
-                    // ->reactive()
-                    ->required(),
-                //  ->searchable()
+                    ->disabled(fn (callable $get) => $get('status') === StatusToko::Tutup),
                 Forms\Components\TextInput::make('jumlah_suplai')
                     ->numeric()
                     ->label('Jumlah Produk')
-                    // ->reactive()
+                    ->readOnly(fn (callable $get) => $get('status') === StatusToko::Tutup),
+                Forms\Components\Hidden::make('user_id')
+                    ->default(auth()->id())
                     ->required(),
-                // Forms\Components\Toggle::make('libur')
-                //     ->default(false)
-                //     ->reactive()
-                //     ->afterStateUpdated(function ($state, callable $set) {
-                //         if ($state) {
-                //             $set('nama_produk', null);
-                //             $set('jumlah_suplai', 0);
-                //         }
-                //     })
-                //     ->label('Libur'),
             ]);
     }
-
+    
     public static function table(Table $table): Table
     {
         return $table
+            // ->query(function (Builder $query) {
+            //     if(auth()->user()->hasRole('supplier')){
+            //         $query = Suplai::query()->where('nama_supplier', auth()->user()->name);
+            //                 // ->where('is_active', 1);
+            //         return $query;
+            //     }
+            //     })
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal')
                     ->getStateUsing(fn ($record) => 
                         $record->tanggal ? \Carbon\Carbon::parse($record->tanggal)->format('d-m-Y') : null 
                         )
                     ->label('Tanggal'),
+                    // ->visible(fn ($record) => auth()->user()->can('view-suplai')),
+                Tables\Columns\TextColumn::make('nama_supplier')
+                    ->label('Nama Supplier'),
+                    // ->visible(fn ($record) => auth()->user()->can('view-suplai')),
+                Tables\Columns\ToggleColumn::make('is_active')
+                    ->label('Is Active')
+                    ->visible(fn () => auth()->user()->can('activated-suplai')),
                 Tables\Columns\TextColumn::make('produk.nama_produk')
-                    ->label('Nama Produk'),
+                    ->label('Nama Produk')
+                    ->default('-'),
+                    // ->visible(fn ($record) => auth()->user()->can('view-suplai')),
                 Tables\Columns\TextColumn::make('jumlah_suplai')
-                    ->label('Jumlah Suplai'),
+                    ->label('Jumlah Suplai')
+                    ->default('-'),
+                    // ->visible(fn ($record) => auth()->user()->can('view-suplai')),
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Status Toko')
+                    ->badge(StatusToko::class),
+                    // ->visible(fn ($record) => auth()->user()->can('view-suplai')),
             ])
             ->filters([
-                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

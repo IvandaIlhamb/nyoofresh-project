@@ -5,11 +5,13 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\HasilPenjualanResource\Pages;
 use App\Filament\Resources\HasilPenjualanResource\RelationManagers;
 use App\Models\HasilPenjualan;
+use App\Models\Produk;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -27,6 +29,11 @@ class HasilPenjualanResource extends Resource
         else
             return false;
     }
+    // public static function hasilstatus($hasilBuka): string
+    // {
+    //     $hasilBuka = HasilPenjualan::where('status', 'Buka')
+    //     ->pluck('id_suplai'); 
+    // }
 
     // ----------hidden akses url /hasil-penjualan jika tidak memiliki akses
     public static function canViewAny(): bool
@@ -41,7 +48,19 @@ class HasilPenjualanResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\DatePicker::make('tanggal')
+                    ->default(Carbon::now()->format('d-m-Y'))
+                    ->label('Tanggal')
+                    ->required(),
+                Forms\Components\Select::make('id_suplai')
+                    ->relationship(
+                        'suplai', 
+                        'nama_supplier', 
+                        fn ($query) => $query->where('status', 'Buka') // Filter hanya status 'buka'
+                    )
+                    ->label('Pilih Supplier')
+                    ->native(false)
+                    ->required(),
             ]);
     }
 

@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('suplais', function (Blueprint $table) {
             $table->id(); // Primary key
-            $table->date('tanggal'); // Kolom untuk menyimpan tanggal suplai
-            $table->enum('status', ['Buka', 'Tutup'])->default('Buka');
-            $table->foreignId('nama_produk')->constrained('produks')->onDelete('cascade'); // Relasi ke tabel 'produks'
-            $table->integer('jumlah_suplai'); // Kolom untuk jumlah suplai
+            $table->string('nama_supplier');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel 'produks'
+            $table->date('tanggal')->nullable(); // Kolom untuk menyimpan tanggal suplai
+            $table->enum('status', ['Buka', 'Tutup'])->default('Tutup')->nullable();
+            $table->tinyInteger('is_active')->default(0);
+            $table->foreignId('id_produk')->constrained('produks')->onDelete('cascade')->nullable(); // Relasi ke tabel 'produks'
+            $table->integer('jumlah_suplai')->nullable(); // Kolom untuk jumlah suplai
             $table->timestamps(); // Kolom created_at dan updated_at
         });
     }
