@@ -114,7 +114,6 @@ class AdminPanelProvider extends PanelProvider
                                 ...DroppingResource::getNavigationItems(),
                                 ...HasilPenjualanResource::getNavigationItems(),
                                 ...RekapPenjualanResource::getNavigationItems(),
-                                ...SuplaiResource::getNavigationItems(),
                             ]),
                             NavigationGroup::make('Keuangan')
                                 ->items([
