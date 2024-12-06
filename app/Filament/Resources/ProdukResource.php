@@ -33,14 +33,39 @@ class ProdukResource extends Resource
     }
 
     // ----------hidden akses url /produk jika tidak memiliki akses
-    public static function canViewAny(): bool
+    public static function canCreate(): bool
     {
-        if(auth()->user()->can('produk'))
+        if(auth()->user()->can('create-produk'))
             return true;
         else
             return false;
     }
 
+    // Membatasi akses untuk mengedit user
+    public static function canEdit($record): bool
+    {
+        if(auth()->user()->can('edit-produk'))
+            return true;
+        else
+            return false;
+    }
+
+    // Membatasi akses untuk menghapus user
+    public static function canDelete($record): bool
+    {
+        if(auth()->user()->can('delete-produk'))
+            return true;
+        else
+            return false;
+    }
+    public static function canView($record): bool
+    {
+        if(auth()->user()->can('view-produk'))
+            return true;
+        else
+            return false;
+    }
+    
     public static function form(Form $form): Form
     {
         return $form
@@ -70,31 +95,53 @@ class ProdukResource extends Resource
                     ->maxValue(42949672.95),
                 Forms\Components\FileUpload::make('foto_produk')
                     ->label('Foto Produk')
-                    ->image()
+                    ->image(),
+                Forms\Components\Hidden::make('supplier_id')
+                    ->default(auth()->id())
+                    ->required(),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->query(function (Builder $query) {
+                $user = auth()->user();
+                if ($user->hasRole('supplier')) {
+                    return Produk::query()->where('is_active', 1);
+                }
+                return Produk::query();
+                })
             ->columns([
                 Tables\Columns\TextColumn::make('lapak')
-                    ->numeric(),
+                    ->numeric()
+                    ->searchable(),
+                Tables\Columns\ToggleColumn::make('is_active')
+                    ->label('Acc Produk')
+                    ->onColor('success') 
+                    ->offColor('danger') 
+                    ->toggleable()
+                    ->searchable()
+                    ->visible(fn () => auth()->user()->can('acc-produk')),
                 Tables\Columns\TextColumn::make('nama_produk')
-                    ->label('Nama Produk'),
+                    ->label('Nama Produk')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('deskripsi')
                     ->label('Deskripsi Produk')
-                    ->limit(50),
+                    ->limit(50)
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('harga_kulak')
                     ->label('Harga Kulak')
                     ->numeric()
                     ->money('IDR', locale: 'id')
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('harga_jual')
                     ->label('Harga Jual')
                     ->numeric()
                     ->money('IDR', locale: 'id')
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\ImageColumn::make('foto_produk')
                     ->label('Foto Produk')
             ])
