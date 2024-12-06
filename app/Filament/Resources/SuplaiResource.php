@@ -126,6 +126,13 @@ class SuplaiResource extends Resource
             //         return $query;
             //     }
             //     })
+            ->query(function (Builder $query) {
+                $user = auth()->user();
+                if ($user->hasRole('supplier')) {
+                    return Suplai::query()->where('nama_supplier', auth()->user()->name);
+                }
+                return Suplai::query();
+                })
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal')
                     ->getStateUsing(fn ($record) => 
