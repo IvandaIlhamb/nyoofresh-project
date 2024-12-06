@@ -119,13 +119,6 @@ class SuplaiResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            // ->query(function (Builder $query) {
-            //     if(auth()->user()->hasRole('supplier')){
-            //         $query = Suplai::query()->where('nama_supplier', auth()->user()->name);
-            //                 // ->where('is_active', 1);
-            //         return $query;
-            //     }
-            //     })
             ->query(function (Builder $query) {
                 $user = auth()->user();
                 if ($user->hasRole('supplier')) {

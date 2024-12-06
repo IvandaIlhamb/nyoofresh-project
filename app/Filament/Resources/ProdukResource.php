@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProdukResource\Pages;
 use App\Filament\Resources\ProdukResource\RelationManagers;
+use App\Models\HasilPenjualan;
 use App\Models\Produk;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -99,9 +100,20 @@ class ProdukResource extends Resource
                 Forms\Components\Hidden::make('supplier_id')
                     ->default(auth()->id())
                     ->required(),
-            ]);
+                    ]);
     }
-
+    public function afterSave(): void
+    {
+        $produkId = $this->record->id;
+        
+        // Pastikan data tersimpan di tabel hasil
+        HasilPenjualan::updateOrCreate(
+            ['id_produk' => $this->$produkId], 
+            [
+                'id_produk' => $this->$produkId,
+            ]
+        );
+    }
     public static function table(Table $table): Table
     {
         return $table
@@ -115,6 +127,9 @@ class ProdukResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('lapak')
                     ->numeric()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('suplai.nama_supplier')
+                    ->label('Supplier')
                     ->searchable(),
                 Tables\Columns\ToggleColumn::make('is_active')
                     ->label('Acc Produk')

@@ -52,6 +52,10 @@ class HasilPenjualanResource extends Resource
                     ->default(Carbon::now()->format('d-m-Y'))
                     ->label('Tanggal')
                     ->required(),
+                Forms\Components\Select::make('id_produk')
+                    ->relationship('produk', 'nama_produk')
+                    ->label('Nama Produk')
+                    ->readOnly(),
                 Forms\Components\Select::make('id_suplai')
                     ->relationship(
                         'suplai', 
@@ -63,12 +67,26 @@ class HasilPenjualanResource extends Resource
                     ->required(),
             ]);
     }
-
+    
     public static function table(Table $table): Table
     {
         return $table
+            ->query(function (Builder $query) {
+                return $query = HasilPenjualan::join('produks', 'hasil_penjualans.id_produk', '=', 'produks.id')
+                        ->where('produks.is_active', 1);
+            })
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('tanggal')
+                    ->default(Carbon::now()->format('d-m-Y'))
+                    ->label('Tanggal'),
+                Tables\Columns\TextColumn::make('produk.nama_produk')
+                    ->label('Produk'),
+                Tables\Columns\TextColumn::make('suplai.nama_supplier')
+                    ->label('Nama Supplier'),
+                Tables\Columns\TextColumn::make('terjual')
+                    ->label('Terjual'),
+                Tables\Columns\TextColumn::make('kembali')
+                    ->label('Kembali'),
             ])
             ->filters([
                 //

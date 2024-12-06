@@ -13,6 +13,7 @@ class Produk extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'lapak',
         'nama_produk',
         'deskripsi',
@@ -24,6 +25,20 @@ class Produk extends Model
     ];
     public function suplai(): HasMany
     {
-        return $this->hasMany(Suplai::class);
+        return $this->hasMany(Suplai::class, 'id_produk');
     }
+    public function hasil(): HasMany
+    {
+        return $this->hasMany(HasilPenjualan::class);
+    }
+    // protected static function booted()
+    // {
+    //     static::saved(function ($produk) {
+    //         HasilPenjualan::create([
+    //             'id_produk' => $produk->id,
+    //             'tanggal' => now(),
+    //         ]);
+    //     });
+    // }
+
 }
