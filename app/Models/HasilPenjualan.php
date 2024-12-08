@@ -10,9 +10,10 @@ class HasilPenjualan extends Model
 {
     protected $table = 'hasil_penjualans';
     protected $fillable = [
+        'id',
         'tanggal', 
         'id_suplai',
-        'id_produk',
+        'produk_id',
         'terjual',
         'kembali'
     ];
@@ -23,7 +24,7 @@ class HasilPenjualan extends Model
     }
     public function produk(): BelongsTo
     {
-        return $this->belongsTo(Produk::class, 'id_produk');
+        return $this->belongsTo(Produk::class, 'produk_id', 'id');
     }
 
 

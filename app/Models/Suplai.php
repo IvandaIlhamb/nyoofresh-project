@@ -31,12 +31,21 @@ class Suplai extends Model
     {
         return $this->belongsTo(Produk::class, 'id_produk');
     }
-    public function hasilpenjualan(): HasMany
+    public function hasil(): HasMany
     {
         return $this->hasMany(HasilPenjualan::class, 'id_suplai');
     }
     public function user(): HasOne
     {
         return $this->hasOne(User::class);
+    }
+    protected static function booted()
+    {
+        static::saved(function ($suplai) {
+            // $produk = Produk::first();
+            HasilPenjualan::updateOrCreate(
+                ['id_suplai' => $suplai->id]
+            );
+        });
     }
 }

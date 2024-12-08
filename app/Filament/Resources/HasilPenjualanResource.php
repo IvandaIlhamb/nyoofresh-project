@@ -43,7 +43,10 @@ class HasilPenjualanResource extends Resource
         else
             return false;
     }
-
+    public static function canCreate(): bool
+    {
+        return false;
+    }
     public static function form(Form $form): Form
     {
         return $form
@@ -52,34 +55,38 @@ class HasilPenjualanResource extends Resource
                     ->default(Carbon::now()->format('d-m-Y'))
                     ->label('Tanggal')
                     ->required(),
-                Forms\Components\Select::make('id_produk')
-                    ->relationship('produk', 'nama_produk')
-                    ->label('Nama Produk')
-                    ->readOnly(),
+                // Forms\Components\Select::make('produk_id')
+                //     ->relationship('produk', 'nama_produk')
+                //     ->label('Nama Produk')
+                //     ->disabled(),
                 Forms\Components\Select::make('id_suplai')
-                    ->relationship(
-                        'suplai', 
-                        'nama_supplier', 
-                        fn ($query) => $query->where('status', 'Buka') // Filter hanya status 'buka'
-                    )
-                    ->label('Pilih Supplier')
-                    ->native(false)
-                    ->required(),
+                    ->relationship('suplai', 'id_produk')
+                    ->label('Nama Supplier - Nama Produk')
+                    ->getOptionLabelFromRecordUsing(function ($record) {
+                        return $record->nama_supplier . ' - ' . $record->produk->nama_produk;
+                    })
+                    ->disabled(),
+                Forms\Components\TextInput::make('terjual')
+                    ->label('Jumlah Terjual'),
+                Forms\Components\TextInput::make('Jumlah Kembali')
+                    ->label('Jumlah Kembali'),
             ]);
     }
     
     public static function table(Table $table): Table
     {
         return $table
-            ->query(function (Builder $query) {
-                return $query = HasilPenjualan::join('produks', 'hasil_penjualans.id_produk', '=', 'produks.id')
-                        ->where('produks.is_active', 1);
-            })
+            // ->query(function (Builder $query) {
+            //     return $query = HasilPenjualan::join('produks', 'hasil_penjualans.produk_id', '=', 'produks.id')
+            //             ->where('produks.is_active', 1);
+            // })
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal')
                     ->default(Carbon::now()->format('d-m-Y'))
                     ->label('Tanggal'),
-                Tables\Columns\TextColumn::make('produk.nama_produk')
+                // Tables\Columns\TextColumn::make('produk.nama_produk')
+                //     ->label('Produk'),
+                Tables\Columns\TextColumn::make('suplai.produk.nama_produk')
                     ->label('Produk'),
                 Tables\Columns\TextColumn::make('suplai.nama_supplier')
                     ->label('Nama Supplier'),
@@ -93,6 +100,7 @@ class HasilPenjualanResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

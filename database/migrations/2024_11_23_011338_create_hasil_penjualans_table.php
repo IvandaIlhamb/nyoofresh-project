@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('hasil_penjualans', function (Blueprint $table) {
             $table->id();
-            $table->date('tanggal'); // Kolom untuk menyimpan tanggal 
-            $table->foreignId('id_produk')->constrained('produks')->onDelete('cascade'); 
-            $table->foreignId('id_suplai')->constrained('suplais')->onDelete('cascade'); 
-            $table->integer('terjual'); 
-            $table->integer('kembali'); 
+            $table->date('tanggal')->nullable(); // Kolom untuk menyimpan tanggal 
+            $table->foreignId('id_suplai')->constrained('suplais')->onDelete('cascade')->nullable(); 
+            $table->integer('terjual')->nullable(); 
+            $table->integer('kembali')->nullable(); 
             $table->timestamps();
         });
     }

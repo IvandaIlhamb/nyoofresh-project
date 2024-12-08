@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Produk extends Model
 {
     use HasFactory;
-
+    protected $table = 'produks';
     protected $fillable = [
         'id',
         'lapak',
@@ -29,15 +29,16 @@ class Produk extends Model
     }
     public function hasil(): HasMany
     {
-        return $this->hasMany(HasilPenjualan::class);
+        return $this->hasMany(HasilPenjualan::class, 'produk_id', 'id');
     }
     // protected static function booted()
     // {
     //     static::saved(function ($produk) {
-    //         HasilPenjualan::create([
-    //             'id_produk' => $produk->id,
-    //             'tanggal' => now(),
-    //         ]);
+    //         // $produk = Produk::first();
+    //         HasilPenjualan::updateOrCreate(
+    //             ['produk_id' => $produk->id], // Kondisi untuk mencegah duplikasi
+    //             [/* kolom lain jika perlu */]
+    //         );
     //     });
     // }
 

@@ -102,7 +102,9 @@ class SuplaiResource extends Resource
                         'style' => 'background-color: #f0f0f0; color: #888; cursor: not-allowed;',  
                     ]),
                 Forms\Components\Select::make('id_produk')
-                    ->relationship('produk', 'nama_produk')
+                    ->relationship('produk', 'nama_produk', function (\Illuminate\Database\Eloquent\Builder $query) {
+                        $query->where('is_active', 1);
+                    })
                     ->placeholder('Tidak Ada Suplai Produk')
                     ->label('Nama Produk')
                     ->disabled(fn (callable $get) => $get('status') === StatusToko::Tutup),
