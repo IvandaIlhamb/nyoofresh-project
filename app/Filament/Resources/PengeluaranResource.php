@@ -46,8 +46,14 @@ class PengeluaranResource extends Resource
                     ->default(Carbon::now()->format('d-m-Y'))
                     ->label('Tanggal Pengeluaran')
                     ->required(),
-                Forms\Components\TextInput::make('keperluan')
+                Forms\Components\Select::make('keperluan')
                     ->label('Keperluan')
+                    ->options([
+                        'Retribusi' => 'Retribusi',
+                        'Plastik' => 'Plastik',
+                        'Bensin' => 'Bensin',
+                    ])
+                    ->native(false)
                     ->required(),
                 Forms\Components\TextInput::make('jumlah_keperluan')
                     ->label('Jumlah')
