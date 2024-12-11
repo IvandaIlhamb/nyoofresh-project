@@ -125,6 +125,11 @@ class SuplaiResource extends Resource
                 $user = auth()->user();
                 if ($user->hasRole('supplier')) {
                     return Suplai::query()->where('nama_supplier', auth()->user()->name);
+                }elseif($user->hasRole('dropping')){
+                    return Suplai::query()
+                    ->whereHas('produk', function ($query) {
+                        $query->where('lapak', 'Diluar Nyoofresh');
+                    });
                 }
                 return Suplai::query();
                 })

@@ -83,17 +83,22 @@ class HasilPenjualanResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal')
                     ->default(Carbon::now()->format('d-m-Y'))
-                    ->label('Tanggal'),
+                    ->label('Tanggal')
+                    ->searchable(),
                 // Tables\Columns\TextColumn::make('produk.nama_produk')
                 //     ->label('Produk'),
                 Tables\Columns\TextColumn::make('suplai.produk.nama_produk')
-                    ->label('Produk'),
+                    ->label('Produk')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('suplai.nama_supplier')
-                    ->label('Nama Supplier'),
+                    ->label('Nama Supplier')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('terjual')
-                    ->label('Terjual'),
+                    ->label('Terjual')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('kembali')
-                    ->label('Kembali'),
+                    ->label('Kembali')
+                    ->searchable(),
             ])
             ->filters([
                 //
