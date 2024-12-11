@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\MonitoringRekapLapakNyoofreshResource\Pages;
 use App\Filament\Resources\MonitoringRekapLapakNyoofreshResource\RelationManagers;
 use App\Models\MonitoringRekapLapakNyoofresh;
+use App\Models\Produk;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -48,6 +49,9 @@ class MonitoringRekapLapakNyoofreshResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->query(function (Builder $query) {
+                    return Produk::query()->where('lapak', 'Lapak Nyoofresh');
+            })
             ->columns([
                 //
             ])

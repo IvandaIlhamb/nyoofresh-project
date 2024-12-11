@@ -28,13 +28,13 @@ class SuplaiResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     // ----------hidden suplai jika tidak memiliki akses
-    // public static function shouldRegisterNavigation(): bool
-    // {
-        // if(auth()->user()->can('suplai'))
-        //     return true;
-        // else
-        //     return false;
-    // }
+    public static function shouldRegisterNavigation(): bool
+    {
+        if(auth()->user()->can('suplai'))
+            return true;
+        else
+            return false;
+    }
 
     // ----------hidden akses url /suplai jika tidak memiliki akses
     // public static function canViewAny(): bool
@@ -73,6 +73,13 @@ class SuplaiResource extends Resource
     public static function canView($record): bool
     {
         if(auth()->user()->can('view-suplai'))
+            return true;
+        else
+            return false;
+    }
+    public static function canViewAny(): bool
+    {
+        if(auth()->user()->can('suplai'))
             return true;
         else
             return false;
@@ -129,6 +136,11 @@ class SuplaiResource extends Resource
                     return Suplai::query()
                     ->whereHas('produk', function ($query) {
                         $query->where('lapak', 'Diluar Nyoofresh');
+                    });
+                }elseif($user->hasRole('penjaga lapak')){
+                    return Suplai::query()
+                    ->whereHas('produk', function ($query) {
+                        $query->where('lapak', 'Lapak Nyoofresh');
                     });
                 }
                 return Suplai::query();

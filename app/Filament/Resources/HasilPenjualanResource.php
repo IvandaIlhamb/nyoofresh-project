@@ -6,6 +6,7 @@ use App\Filament\Resources\HasilPenjualanResource\Pages;
 use App\Filament\Resources\HasilPenjualanResource\RelationManagers;
 use App\Models\HasilPenjualan;
 use App\Models\Produk;
+use App\Models\Suplai;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -76,10 +77,25 @@ class HasilPenjualanResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            // ->query(function (Builder $query) {
-            //     return $query = HasilPenjualan::join('produks', 'hasil_penjualans.produk_id', '=', 'produks.id')
-            //             ->where('produks.is_active', 1);
-            // })
+            ->query(function (Builder $query) {
+                $user = auth()->user();
+                if($user->hasRole('dropping')){
+                    return HasilPenjualan::query()
+                    ->whereHas('suplai', function ($query) {
+                        $query->whereHas('produk', function ($query) {
+                            $query->where('lapak', 'Diluar Nyoofresh');
+                        });
+                    });
+                }elseif($user->hasRole('penjaga lapak')){
+                    return HasilPenjualan::query()
+                    ->whereHas('suplai', function ($query) {
+                        $query->whereHas('produk', function ($query) {
+                            $query->where('lapak', 'Lapak Nyoofresh');
+                        });
+                    });
+                }
+                return HasilPenjualan::query();
+                })
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal')
                     ->default(Carbon::now()->format('d-m-Y'))
@@ -93,6 +109,9 @@ class HasilPenjualanResource extends Resource
                 Tables\Columns\TextColumn::make('suplai.nama_supplier')
                     ->label('Nama Supplier')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('suplai.jumlah_suplai')
+                    ->label('Jumlah Suplai')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('terjual')
                     ->label('Terjual')
                     ->searchable(),
@@ -105,7 +124,7 @@ class HasilPenjualanResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                // Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

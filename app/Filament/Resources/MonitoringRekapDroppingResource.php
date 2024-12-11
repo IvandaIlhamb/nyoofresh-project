@@ -37,6 +37,8 @@ class MonitoringRekapDroppingResource extends Resource
             return false;
     }
 
+    //hasil penjualan
+
     public static function form(Form $form): Form
     {
         return $form
