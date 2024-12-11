@@ -4,13 +4,16 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\MonitoringRekapDroppingResource\Pages;
 use App\Filament\Resources\MonitoringRekapDroppingResource\RelationManagers;
+use App\Models\HasilPenjualan;
 use App\Models\MonitoringRekapDropping;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class MonitoringRekapDroppingResource extends Resource
@@ -36,6 +39,14 @@ class MonitoringRekapDroppingResource extends Resource
         else
             return false;
     }
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+    public static function canEdit(Model $record): bool
+    {
+        return false;
+    }
 
     //hasil penjualan
 
@@ -50,19 +61,48 @@ class MonitoringRekapDroppingResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->query(function (Builder $query) {
+                    return HasilPenjualan::query()
+                    ->whereHas('suplai', function ($query) {
+                        $query->whereHas('produk', function ($query) {
+                            $query->where('lapak', 'Diluar Nyoofresh');
+                        });
+                    });
+                return HasilPenjualan::query();
+                })
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('tanggal')
+                    ->default(Carbon::now()->format('d-m-Y'))
+                    ->label('Tanggal')
+                    ->searchable(),
+                // Tables\Columns\TextColumn::make('produk.nama_produk')
+                //     ->label('Produk'),
+                Tables\Columns\TextColumn::make('suplai.produk.nama_produk')
+                    ->label('Produk')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('suplai.nama_supplier')
+                    ->label('Nama Supplier')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('suplai.jumlah_suplai')
+                    ->label('Jumlah Suplai')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('terjual')
+                    ->label('Terjual')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('kembali')
+                    ->label('Kembali')
+                    ->searchable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 

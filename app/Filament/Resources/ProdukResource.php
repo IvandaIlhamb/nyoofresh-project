@@ -125,7 +125,9 @@ class ProdukResource extends Resource
             ->query(function (Builder $query) {
                 $user = auth()->user();
                 if ($user->hasRole('supplier')) {
-                    return Produk::query()->where('is_active', 1);
+                    return Produk::query()
+                    ->where('supplier_id', auth()->user()->id)
+                    ->where('is_active', 1);
                 }
                 return Produk::query();
                 })
@@ -133,9 +135,17 @@ class ProdukResource extends Resource
                 Tables\Columns\TextColumn::make('lapak')
                     ->numeric()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('suplai.nama_supplier')
+                Tables\Columns\TextColumn::make('user.name')
                     ->label('Supplier')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('suplai.id_produk')
+                    ->label('Status')
+                    ->getStateUsing(fn ($record) => $record->suplai->first()?->id_produk ? 'Produk Sudah Disuplai' : 'Produk Belum Disuplai')
+                    ->searchable()
+                    ->colors([
+                        'success' => 'Produk Sudah Disuplai', 
+                        'danger' => 'Produk Belum Disuplai',  
+                    ]),
                 Tables\Columns\ToggleColumn::make('is_active')
                     ->label('Acc Produk')
                     ->onColor('success') 

@@ -110,7 +110,8 @@ class SuplaiResource extends Resource
                     ]),
                 Forms\Components\Select::make('id_produk')
                     ->relationship('produk', 'nama_produk', function (\Illuminate\Database\Eloquent\Builder $query) {
-                        $query->where('is_active', 1);
+                        $query->where('supplier_id', auth()->user()->id)
+                        ->where('is_active', 1);
                     })
                     ->placeholder('Tidak Ada Suplai Produk')
                     ->label('Nama Produk')

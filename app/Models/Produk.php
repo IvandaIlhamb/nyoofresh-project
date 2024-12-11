@@ -31,6 +31,10 @@ class Produk extends Model
     {
         return $this->hasMany(HasilPenjualan::class, 'produk_id', 'id');
     }
+    public function user(): HasMany
+    {
+        return $this->hasMany(User::class, 'id', 'supplier_id');
+    }
     // protected static function booted()
     // {
     //     static::saved(function ($produk) {

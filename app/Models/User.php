@@ -41,6 +41,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Suplai::class, 'id', 'user_id');
     }
+    public function produk(): BelongsTo
+    {
+        return $this->belongsTo(Produk::class, 'supplier_id');
+    }
     protected static function booted()
     {
         static::saved(function ($user) {
@@ -48,7 +52,7 @@ class User extends Authenticatable
 
             if (in_array('supplier', $roles)) {
                 \App\Models\Suplai::updateOrCreate(
-                    ['user_id' => $user->id], // Pastikan ada kolom `user_id` di tabel `suplai`
+                    ['user_id' => $user->id], 
                     ['nama_supplier' => $user->name]
                 );
             }
