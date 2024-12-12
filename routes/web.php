@@ -8,3 +8,4 @@ Route::get('/', function () {
 });
 
 Route::get('PDFRekapDropping', [PDFController::class, 'generatePDFRekapDropping'])->name('PDFRekapDropping');
+Route::get('PDFRekapLapak', [PDFController::class, 'generatePDFRekapLapak'])->name('PDFRekapLapak');

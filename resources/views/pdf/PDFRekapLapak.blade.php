@@ -36,7 +36,7 @@
     </style>
 </head>
 <body>
-    <h1>Rekap Dropping</h1>
+    <h1>Rekap Monitor Lapak</h1>
     <p>Dibuat Tanggal: {{ now()->isoformat('D MMMM Y') }}</p>
 
     <table>
@@ -65,7 +65,7 @@
     </table>
 
     <div class="footer">
-        <p>Rekap dropping ini diunduh. {{ now()->isoformat('D MMMM Y, HH:mm:ss') }}</p>
+        <p>Rekap lapak ini diunduh. {{ now()->isoformat('D MMMM Y, HH:mm:ss') }}</p>
     </div>
 </body>
 </html>

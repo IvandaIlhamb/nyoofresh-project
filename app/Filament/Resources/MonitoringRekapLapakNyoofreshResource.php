@@ -70,10 +70,11 @@ class MonitoringRekapLapakNyoofreshResource extends Resource
         return HasilPenjualan::query();
         })
         ->columns([
-            Tables\Columns\TextColumn::make('tanggal')
-                ->default(Carbon::now()->isoformat('D MMMM Y'))
-                ->label('Tanggal')
-                ->searchable(),
+            Tables\Columns\TextColumn::make('suplai.tanggal')
+                ->formatStateUsing(fn ($state) => $state ? \Carbon\Carbon::parse($state)->isoformat('D MMMM Y') : '-')
+                ->label('Tanggal Produk Masuk')
+                ->searchable()
+                ->sortable(),
             // Tables\Columns\TextColumn::make('produk.nama_produk')
             //     ->label('Produk'),
             Tables\Columns\TextColumn::make('suplai.produk.nama_produk')
