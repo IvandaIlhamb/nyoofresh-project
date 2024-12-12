@@ -96,7 +96,7 @@ class SuplaiResource extends Resource
                     ->required()
                     ->reactive(),
                 Forms\Components\DatePicker::make('tanggal')
-                    ->default(Carbon::now()->format('d-m-Y'))
+                    ->default(Carbon::now()->isoformat('D MMMM Y'))
                     ->label('Tanggal')
                     ->required(),
                     // ->readOnly(fn (callable $get) => $get('status') !== StatusToko::Buka),
@@ -149,7 +149,7 @@ class SuplaiResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal')
                     ->getStateUsing(fn ($record) => 
-                        $record->tanggal ? \Carbon\Carbon::parse($record->tanggal)->format('d-m-Y') : null 
+                        $record->tanggal ? \Carbon\Carbon::parse($record->tanggal)->isoformat('D MMMM Y') : null 
                         )
                     ->label('Tanggal'),
                     // ->visible(fn ($record) => auth()->user()->can('view-suplai')),

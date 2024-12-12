@@ -66,7 +66,7 @@ class RekapPenjualanResource extends Resource
             })
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal')
-                    ->default(Carbon::now()->format('d-m-Y'))
+                    ->default(Carbon::now()->isoformat('D MMMM Y'))
                     ->label('Tanggal')
                     ->searchable(),
                 // Tables\Columns\TextColumn::make('produk.nama_produk')

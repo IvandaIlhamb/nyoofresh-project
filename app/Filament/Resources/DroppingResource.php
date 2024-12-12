@@ -67,9 +67,9 @@ class DroppingResource extends Resource
             return Suplai::query();
             })
         ->columns([
-            Tables\Columns\TextColumn::make('tanggal')
+            Tables\Columns\TextColumn::make('suplai.tanggal')
                 ->getStateUsing(fn ($record) => 
-                    $record->tanggal ? \Carbon\Carbon::parse($record->tanggal)->format('d-m-Y') : null 
+                    $record->tanggal ? \Carbon\Carbon::parse($record->tanggal)->isoformat('D MMMM Y') : null 
                     )
                 ->label('Tanggal'),
                 // ->visible(fn ($record) => auth()->user()->can('view-suplai')),

@@ -43,17 +43,11 @@ class PengeluaranResource extends Resource
         return $form
             ->schema([
                 Forms\Components\DatePicker::make('tanggal_pengeluaran')
-                    ->default(Carbon::now()->format('d-m-Y'))
+                    ->default(Carbon::now()->isoformat('D MMMM Y'))
                     ->label('Tanggal Pengeluaran')
                     ->required(),
-                Forms\Components\Select::make('keperluan')
+                Forms\Components\TextInput::make('keperluan')
                     ->label('Keperluan')
-                    ->options([
-                        'Retribusi' => 'Retribusi',
-                        'Plastik' => 'Plastik',
-                        'Bensin' => 'Bensin',
-                    ])
-                    ->native(false)
                     ->required(),
                 Forms\Components\TextInput::make('jumlah_keperluan')
                     ->label('Jumlah')
@@ -67,8 +61,8 @@ class PengeluaranResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal_pengeluaran')
-                    ->default(Carbon::now()->format('d-m-Y'))
-                    ->getStateUsing(fn ($record) => Carbon::parse($record->tanggal_pengeluaran)->format('d-m-Y')),
+                    ->default(Carbon::now()->isoformat('D MMMM Y'))
+                    ->getStateUsing(fn ($record) => Carbon::parse($record->tanggal_pengeluaran)->isoformat('D MMMM Y')),
                 Tables\Columns\TextColumn::make('keperluan')
                     ->label('Nama Produk'),
                 Tables\Columns\TextColumn::make('jumlah_keperluan')

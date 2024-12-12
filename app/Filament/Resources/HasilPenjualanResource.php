@@ -53,7 +53,7 @@ class HasilPenjualanResource extends Resource
         return $form
             ->schema([
                 Forms\Components\DatePicker::make('tanggal')
-                    ->default(Carbon::now()->format('d-m-Y'))
+                    ->default(Carbon::now()->isoformat('D MMMM Y'))
                     ->label('Tanggal')
                     ->required(),
                 // Forms\Components\Select::make('produk_id')
@@ -97,9 +97,9 @@ class HasilPenjualanResource extends Resource
                 return HasilPenjualan::query();
                 })
             ->columns([
-                Tables\Columns\TextColumn::make('tanggal')
-                    ->default(Carbon::now()->format('d-m-Y'))
-                    ->label('Tanggal')
+                Tables\Columns\TextColumn::make('suplai.tanggal')
+                    ->default(Carbon::now()->isoformat('D MMMM Y'))
+                    ->label('Tanggal Produk Masuk')
                     ->searchable(),
                 // Tables\Columns\TextColumn::make('produk.nama_produk')
                 //     ->label('Produk'),
