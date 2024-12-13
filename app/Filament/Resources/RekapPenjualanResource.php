@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class RekapPenjualanResource extends Resource
 {
-    protected static ?string $model = HasilPenjualan::class;
+    protected static ?string $model = RekapPenjualan::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

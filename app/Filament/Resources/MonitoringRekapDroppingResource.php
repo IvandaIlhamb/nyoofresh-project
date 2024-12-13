@@ -72,7 +72,7 @@ class MonitoringRekapDroppingResource extends Resource
                 })
             ->columns([
                 Tables\Columns\TextColumn::make('suplai.tanggal')
-                ->formatStateUsing(fn ($state) => $state ? \Carbon\Carbon::parse($state)->isoformat('D MMMM Y') : '-')
+                    ->formatStateUsing(fn ($state) => $state ? \Carbon\Carbon::parse($state)->isoformat('D MMMM Y') : '-')
                     ->label('Tanggal Produk Masuk')
                     ->searchable(),
                 // Tables\Columns\TextColumn::make('produk.nama_produk')

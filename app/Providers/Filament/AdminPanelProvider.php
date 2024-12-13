@@ -95,7 +95,7 @@ class AdminPanelProvider extends PanelProvider
                                 ...MonitoringRekapLapakNyoofreshResource::getNavigationItems(),
                                 ...DroppingResource::getNavigationItems(),
                                 ...HasilPenjualanResource::getNavigationItems(),
-                                ...RekapPenjualanResource::getNavigationItems(),
+                                // ...RekapPenjualanResource::getNavigationItems(),
                                 ...SuplaiResource::getNavigationItems(),
                             ]),
                         NavigationGroup::make('Keuangan')

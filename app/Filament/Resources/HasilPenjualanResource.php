@@ -48,6 +48,17 @@ class HasilPenjualanResource extends Resource
     {
         return false;
     }
+    public static function canEdit($record): bool
+    {
+        $user = auth()->user();
+
+        // Jika role adalah supplier, maka tidak bisa mengedit
+        if ($user->hasRole('supplier')) {
+            return false;
+        }
+
+        return true; // Untuk role lainnya, izinkan edit
+    }
     public static function form(Form $form): Form
     {
         return $form
@@ -64,13 +75,17 @@ class HasilPenjualanResource extends Resource
                     ->relationship('suplai', 'id_produk')
                     ->label('Nama Supplier - Nama Produk')
                     ->getOptionLabelFromRecordUsing(function ($record) {
-                        return $record->nama_supplier . ' - ' . $record->produk->nama_produk;
+                        $namaSupplier = $record->nama_supplier;
+                        $namaProduk = optional($record->produk)->nama_produk; // Gunakan optional untuk menghindari error
+                        return $namaSupplier . ' - ' . ($namaProduk ?: 'Produk Tidak Tersedia'); // Tampilkan pesan default jika produk tidak ada
                     })
                     ->disabled(),
                 Forms\Components\TextInput::make('terjual')
-                    ->label('Jumlah Terjual'),
-                Forms\Components\TextInput::make('Jumlah Kembali')
-                    ->label('Jumlah Kembali'),
+                    ->label('Jumlah Terjual')
+                    ->numeric(),
+                Forms\Components\TextInput::make('kembali')
+                    ->label('Jumlah Kembali')
+                    ->numeric(),
             ]);
     }
     
@@ -93,12 +108,29 @@ class HasilPenjualanResource extends Resource
                             $query->where('lapak', 'Lapak Nyoofresh');
                         });
                     });
+                }elseif($user->hasRole('supplier')){
+                    return HasilPenjualan::query()
+                    ->whereHas('suplai', function ($query) {
+                        $query->where('nama_supplier', auth()->user()->name);
+                        });
                 }
                 return HasilPenjualan::query();
                 })
             ->columns([
-                Tables\Columns\TextColumn::make('suplai.tanggal')
-                    ->default(Carbon::now()->isoformat('D MMMM Y'))
+                Tables\Columns\TextColumn::make('tanggal')
+                    ->formatStateUsing(function ($state, $record) {
+                        // Cek apakah tabel hasil memiliki tanggal
+                        $tanggalHasil = $record->tanggal;
+                        if ($tanggalHasil) {
+                            return \Carbon\Carbon::parse($tanggalHasil)->isoformat('D MMMM Y');
+                        }
+                
+                        // Jika tidak ada, gunakan tanggal dari tabel suplai
+                        $tanggalSuplai = optional($record->suplai)->tanggal;
+                        return $tanggalHasil
+                            ? \Carbon\Carbon::parse($tanggalSuplai)->isoformat('D MMMM Y')
+                            : $tanggalHasil;
+                    })
                     ->label('Tanggal Produk Masuk')
                     ->searchable(),
                 // Tables\Columns\TextColumn::make('produk.nama_produk')
