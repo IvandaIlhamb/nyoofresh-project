@@ -15,7 +15,8 @@ class HasilPenjualan extends Model
         'id_suplai',
         'produk_id',
         'terjual',
-        'kembali'
+        'kembali',
+        'keuntungan'
     ];
 
     public function suplai(): BelongsTo
@@ -25,6 +26,17 @@ class HasilPenjualan extends Model
     public function produk(): BelongsTo
     {
         return $this->belongsTo(Produk::class, 'produk_id', 'id');
+    }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            $terjual = $model->terjual;
+            $hargaJual = optional($model->suplai?->produk)->harga_jual;
+
+            $model->keuntungan = $terjual && $hargaJual ? $terjual * $hargaJual : 0;
+        });
     }
 
 

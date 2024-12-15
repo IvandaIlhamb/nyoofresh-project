@@ -116,6 +116,14 @@ class SuplaiResource extends Resource
                     ->placeholder('Tidak Ada Suplai Produk')
                     ->label('Nama Produk')
                     ->disabled(fn (callable $get) => $get('status') === StatusToko::Tutup),
+                Forms\Components\Select::make('id_produk')
+                    ->relationship('produk', 'harga_jual', function (\Illuminate\Database\Eloquent\Builder $query) {
+                        $query->where('supplier_id', auth()->user()->id)
+                        ->where('is_active', 1);
+                    })
+                    ->placeholder('Tidak Ada Suplai Produk')
+                    ->label('Harga Jual')
+                    ->disabled(),
                 Forms\Components\TextInput::make('jumlah_suplai')
                     ->numeric()
                     ->label('Jumlah Produk')

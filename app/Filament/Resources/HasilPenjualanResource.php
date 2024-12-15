@@ -86,6 +86,9 @@ class HasilPenjualanResource extends Resource
                 Forms\Components\TextInput::make('kembali')
                     ->label('Jumlah Kembali')
                     ->numeric(),
+                Forms\Components\TextInput::make('keuntungan')
+                    ->label('Keuntungan')
+                    ->disabled(),
             ]);
     }
     
@@ -149,6 +152,21 @@ class HasilPenjualanResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('kembali')
                     ->label('Kembali')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('suplai.produk.harga_jual')
+                    ->label('Harga Jual')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('keuntungan')
+                    ->label('Keuntungan')
+                    ->getStateUsing(function ($record) {
+                        $terjual = $record->terjual; // Ambil nilai 'terjual'
+                        $hargaJual = optional($record->suplai?->produk)->harga_jual; // Ambil nilai 'harga_jual'
+                        
+                        // Hitung total pendapatan
+                        return $terjual && $hargaJual ? $terjual * $hargaJual : 0;
+                    })
+                    ->formatStateUsing(fn ($state) => number_format($state, 0, ',', '.')) // Format angka (opsional)
+                    ->sortable()
                     ->searchable(),
             ])
             ->filters([
