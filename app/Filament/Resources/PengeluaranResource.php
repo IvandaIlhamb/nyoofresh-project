@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 class PengeluaranResource extends Resource
 {
@@ -27,6 +28,40 @@ class PengeluaranResource extends Resource
             return true;
         else
             return false;
+    }
+    public static function canEdit($record): bool
+    {
+        $user = auth()->user();
+
+        // Jika role adalah admin, maka tidak bisa mengedit
+        if ($user->hasRole('admin')) {
+            return false;
+        }
+
+        return true; // Untuk role lainnya, izinkan edit
+    }
+    public static function canCreate(): bool
+    {
+        $user = auth()->user();
+
+        // Jika role adalah admin, maka tidak bisa create data
+        if ($user->hasRole('admin')) {
+            return false;
+        }
+
+        return true; // Untuk role lainnya, izinkan create
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        $user = auth()->user();
+
+        // Jika role adalah admin, maka tidak bisa delete data
+        if ($user->hasRole('admin')) {
+            return false;
+        }
+
+        return true; // Untuk role lainnya, izinkan delete   
     }
 
     // ----------hidden akses url /pengeluaran jika tidak memiliki akses
@@ -53,6 +88,13 @@ class PengeluaranResource extends Resource
                     ->label('Jumlah')
                     ->integer()
                     ->required(),
+                Forms\Components\TextInput::make('harga')
+                    ->label('Harga')
+                    ->integer()
+                    ->required(),
+                Forms\Components\Hidden::make('penjaga_id')
+                    ->default(auth()->id())
+                    ->required(),
             ]);
     }
 
@@ -66,7 +108,13 @@ class PengeluaranResource extends Resource
                 Tables\Columns\TextColumn::make('keperluan')
                     ->label('Nama Produk'),
                 Tables\Columns\TextColumn::make('jumlah_keperluan')
-                    ->label('Jumlah Keperluan'),
+                    ->label('Jumlah'),
+                Tables\Columns\TextColumn::make('harga')
+                    ->label('Total Harga')
+                    ->money('IDR', locale: 'id'),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Nama Penjaga')
+                    ->visible(fn () => auth()->user()->hasRole('admin')),
             ])
             ->filters([
                 //

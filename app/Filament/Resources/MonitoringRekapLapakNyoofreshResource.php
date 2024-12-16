@@ -92,6 +92,23 @@ class MonitoringRekapLapakNyoofreshResource extends Resource
             Tables\Columns\TextColumn::make('kembali')
                 ->label('Kembali')
                 ->searchable(),
+            Tables\Columns\TextColumn::make('suplai.produk.harga_jual')
+                ->label('Harga Jual')
+                ->money('IDR', locale: 'id')
+                ->searchable(),                    
+            Tables\Columns\TextColumn::make('keuntungan')
+                ->label('Keuntungan')
+                ->getStateUsing(function ($record) {
+                    $terjual = $record->terjual; // Ambil nilai 'terjual'
+                    $hargaJual = optional($record->suplai?->produk)->harga_jual; // Ambil nilai 'harga_jual'
+                    
+                    // Hitung total pendapatan
+                    return $terjual && $hargaJual ? $terjual * $hargaJual : 0;
+                })
+                ->formatStateUsing(fn ($state) => number_format($state, 0, ',', '.')) // Format angka (opsional)
+                ->sortable()
+                ->money('IDR', locale: 'id')
+                ->searchable(),
         ])
             ->filters([
                 //

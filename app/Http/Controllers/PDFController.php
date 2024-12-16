@@ -24,6 +24,20 @@ class PDFController extends Controller
     // Unduh PDF
     return $pdf->download('PDFRekapDropping' . '.pdf');
     }
+
+    public function index()
+    {
+        $dataHasil = HasilPenjualan::with('produk')->get();
+
+        // Menghitung total keuntungan
+        $totalKeuntungan = $dataHasil->sum(function ($hasil) {
+            return $hasil->keuntungan;
+        });
+
+        return view('pdf.PDFRekapLapak', compact('dataHasil', 'totalKeuntungan'));
+    }
+
+
     public function generatePDFRekapLapak()
     {
 

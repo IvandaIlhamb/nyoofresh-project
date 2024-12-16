@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('id_suplai')->constrained('suplais')->onDelete('cascade')->nullable(); 
             $table->integer('terjual')->nullable(); 
             $table->integer('kembali')->nullable(); 
+            $table->integer('keuntungan')->nullable(); 
             $table->timestamps();
         });
     }

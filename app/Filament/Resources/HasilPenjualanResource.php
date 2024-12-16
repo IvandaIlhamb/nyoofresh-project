@@ -155,6 +155,7 @@ class HasilPenjualanResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('suplai.produk.harga_jual')
                     ->label('Harga Jual')
+                    ->money('IDR', locale: 'id')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('keuntungan')
                     ->label('Keuntungan')
@@ -167,6 +168,7 @@ class HasilPenjualanResource extends Resource
                     })
                     ->formatStateUsing(fn ($state) => number_format($state, 0, ',', '.')) // Format angka (opsional)
                     ->sortable()
+                    ->money('IDR', locale: 'id')
                     ->searchable(),
             ])
             ->filters([

@@ -57,6 +57,7 @@ class RolePermissionSeeder extends Seeder
         $roleAdmin->givePermissionTo('activated-suplai');
         $roleAdmin->givePermissionTo('gajimodalpengeluaran');
         $roleAdmin->givePermissionTo('pemasukan');
+        $roleAdmin->givePermissionTo('pengeluaran');
 
 
         $roleSupplier = Role::findByName('supplier');

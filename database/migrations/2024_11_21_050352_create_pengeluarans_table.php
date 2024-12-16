@@ -16,6 +16,8 @@ return new class extends Migration
             $table->date('tanggal_pengeluaran');
             $table->string('keperluan');
             $table->integer('jumlah_keperluan');
+            $table->integer('harga');
+            $table->foreignId('penjaga_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel 'users'
             $table->timestamps();
         });
     }

@@ -45,6 +45,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Produk::class, 'supplier_id');
     }
+    public function pengeluaran(): BelongsTo
+    {
+        return $this->belongsTo(Produk::class, 'penjaga_id');
+    }
     protected static function booted()
     {
         static::saved(function ($user) {

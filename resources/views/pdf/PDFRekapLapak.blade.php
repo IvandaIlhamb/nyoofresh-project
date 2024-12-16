@@ -48,6 +48,8 @@
                 <th>Jumlah Suplai</th>
                 <th>Terjual</th>
                 <th>Kembali</th>
+                <th>Harga Jual</th>
+                <th>Keuntungan</th>
             </tr>
         </thead>
         <tbody>
@@ -59,9 +61,25 @@
                     <td>{{ $hasil->suplai->jumlah_suplai }}</td>
                     <td>{{ $hasil->terjual }}</td>
                     <td>{{ $hasil->kembali }}</td>
+                    <td>{{ 'Rp ' . number_format($hasil->suplai->produk->harga_jual, 0, ',', '.') }}</td>
+                    <td>{{ 'Rp ' . number_format($hasil->keuntungan, 0, ',', '.') }}</td>
                 </tr>
             @endforeach
         </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="7" style="text-align: left;">Total Keuntungan</th>
+                <th>
+                    {{ 'Rp ' . number_format(
+                        $hasilPenjualan->sum(function ($hasil) {
+                            return optional($hasil)->keuntungan ?? 0;
+                        }), 
+                        0, ',', '.'
+                    ) }}
+                </th>
+
+            </tr>
+        </tfoot>
     </table>
 
     <div class="footer">

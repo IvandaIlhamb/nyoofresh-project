@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pengeluaran extends Model
 {
@@ -11,6 +12,13 @@ class Pengeluaran extends Model
     protected $fillable = [
         'tanggal_pengeluaran', 
         'keperluan',
-        'jumlah_keperluan'
+        'jumlah_keperluan',
+        'penjaga_id',
+        'harga'
     ];
+
+    public function user(): HasMany
+    {
+        return $this->hasMany(User::class, 'id', 'penjaga_id');
+    }
 }
