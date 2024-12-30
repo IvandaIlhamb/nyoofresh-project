@@ -18,7 +18,8 @@ return new class extends Migration
             $table->date('tanggal')->nullable(); // Kolom untuk menyimpan tanggal suplai
             $table->enum('status', ['Buka', 'Tutup'])->default('Tutup')->nullable();
             $table->tinyInteger('is_active')->default(0);
-            $table->foreignId('id_produk')->constrained('produks')->onDelete('cascade')->nullable(); // Relasi ke tabel 'produks'
+            $table->unsignedBigInteger('id_produk')->nullable();
+            $table->foreign('id_produk')->references('id')->on('produks')->onDelete('cascade');
             $table->integer('jumlah_suplai')->nullable(); // Kolom untuk jumlah suplai
             $table->timestamps(); // Kolom created_at dan updated_at
         });
