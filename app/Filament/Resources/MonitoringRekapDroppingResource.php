@@ -23,6 +23,8 @@ class MonitoringRekapDroppingResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     // ----------hidden monitoring rekap dropping jika tidak memiliki akses
+    // note : tambahkan "visible(static::shouldRegisterNavigation())" di vendor->filament->filament->src->resources->resource.php
+    // didalam public static function getNavigationItems(): array
     public static function shouldRegisterNavigation(): bool
     {
         if(auth()->user()->can('monitoringrekapdropping'))

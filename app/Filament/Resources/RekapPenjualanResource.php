@@ -22,6 +22,8 @@ class RekapPenjualanResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     // ----------hidden rekappenjualan jika tidak memiliki akses
+    // note : tambahkan "visible(static::shouldRegisterNavigation())" di vendor->filament->filament->src->resources->resource.php
+    // didalam public static function getNavigationItems(): array
     public static function shouldRegisterNavigation(): bool
     {
         if(auth()->user()->can('rekappenjualan'))
