@@ -34,9 +34,12 @@ class HasilPenjualan extends Model
         static::saving(function ($model) {
             $terjual = $model->terjual;
             $hargaJual = optional($model->suplai?->produk)->harga_jual;
+            $suplai = $model->suplai->jumlah_suplai; 
 
             $model->keuntungan = $terjual && $hargaJual ? $terjual * $hargaJual : 0;
+            $model->kembali = $suplai - $terjual;
         });
+        
     }
 
 

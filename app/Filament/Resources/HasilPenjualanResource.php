@@ -69,25 +69,32 @@ class HasilPenjualanResource extends Resource
                     ->default(Carbon::now()->isoformat('D MMMM Y'))
                     ->label('Tanggal')
                     ->required(),
-                // Forms\Components\Select::make('produk_id')
-                //     ->relationship('produk', 'nama_produk')
-                //     ->label('Nama Produk')
-                //     ->disabled(),
                 Forms\Components\Select::make('id_suplai')
                     ->relationship('suplai', 'id_produk')
                     ->label('Nama Supplier - Nama Produk')
                     ->getOptionLabelFromRecordUsing(function ($record) {
                         $namaSupplier = $record->nama_supplier;
-                        $namaProduk = optional($record->produk)->nama_produk; // Gunakan optional untuk menghindari error
-                        return $namaSupplier . ' - ' . ($namaProduk ?: 'Produk Tidak Tersedia'); // Tampilkan pesan default jika produk tidak ada
+                        $namaProduk = optional($record->produk)->nama_produk; 
+                        return $namaSupplier . ' - ' . ($namaProduk ?: 'Produk Tidak Tersedia'); 
                     })
                     ->disabled(),
+                Forms\Components\Select::make('id_suplai')
+                    ->label('Jumlah Suplai')
+                    ->relationship('suplai', 'jumlah_suplai') 
+                    ->required()
+                    ->disabled()
+                    ->reactive(),
                 Forms\Components\TextInput::make('terjual')
                     ->label('Jumlah Terjual')
-                    ->numeric(),
+                    ->numeric()
+                    ->rules(function (\Filament\Forms\Get $get) {
+                        $suplaiId = $get('id_suplai');
+                        $suplai = \App\Models\Suplai::find($suplaiId);
+                        return $suplai ? "lte:{$suplai->jumlah_suplai}" : 'nullable';
+                    }),
                 Forms\Components\TextInput::make('kembali')
                     ->label('Jumlah Kembali')
-                    ->numeric(),
+                    ->disabled(),
                 Forms\Components\TextInput::make('keuntungan')
                     ->label('Keuntungan')
                     ->disabled(),
@@ -136,7 +143,7 @@ class HasilPenjualanResource extends Resource
                             ? \Carbon\Carbon::parse($tanggalSuplai)->isoformat('D MMMM Y')
                             : $tanggalHasil;
                     })
-                    ->label('Tanggal Produk Masuk')
+                    ->label('Tanggal Penjualan')
                     ->searchable(),
                 // Tables\Columns\TextColumn::make('produk.nama_produk')
                 //     ->label('Produk'),
@@ -154,6 +161,13 @@ class HasilPenjualanResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('kembali')
                     ->label('Kembali')
+                    // ->getStateUsing(function ($record) {
+                    //     $terjual = $record->terjual; 
+                    //     $suplai = $record->suplai->jumlah_suplai; 
+                        
+                    //     // Hitung total pendapatan
+                    //     return $suplai - $terjual;
+                    // })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('suplai.produk.harga_jual')
                     ->label('Harga Jual')
@@ -161,13 +175,13 @@ class HasilPenjualanResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('keuntungan')
                     ->label('Keuntungan')
-                    ->getStateUsing(function ($record) {
-                        $terjual = $record->terjual; // Ambil nilai 'terjual'
-                        $hargaJual = optional($record->suplai?->produk)->harga_jual; // Ambil nilai 'harga_jual'
+                    // ->getStateUsing(function ($record) {
+                    //     $terjual = $record->terjual; // Ambil nilai 'terjual'
+                    //     $hargaJual = optional($record->suplai?->produk)->harga_jual; // Ambil nilai 'harga_jual'
                         
-                        // Hitung total pendapatan
-                        return $terjual && $hargaJual ? $terjual * $hargaJual : 0;
-                    })
+                    //     // Hitung total pendapatan
+                    //     return $terjual && $hargaJual ? $terjual * $hargaJual : 0;
+                    // })
                     ->formatStateUsing(fn ($state) => number_format($state, 0, ',', '.')) // Format angka (opsional)
                     ->sortable()
                     ->money('IDR', locale: 'id')
