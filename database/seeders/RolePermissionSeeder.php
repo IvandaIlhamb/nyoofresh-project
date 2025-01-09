@@ -22,6 +22,7 @@ class RolePermissionSeeder extends Seeder
         Permission::create(['name'=>'gajimodalpengeluaran']);
         Permission::create(['name'=>'activated-suplai']);
         Permission::create(['name'=>'pemasukan']);
+        Permission::create(['name'=>'gaji']);
 
         // ------supplier
         Permission::create(['name'=>'produk']);
@@ -58,6 +59,7 @@ class RolePermissionSeeder extends Seeder
         $roleAdmin->givePermissionTo('gajimodalpengeluaran');
         $roleAdmin->givePermissionTo('pemasukan');
         $roleAdmin->givePermissionTo('pengeluaran');
+        $roleAdmin->givePermissionTo('gaji');
 
 
         $roleSupplier = Role::findByName('supplier');

@@ -73,13 +73,27 @@ class ProdukResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('lapak')
-                    ->options([
-                        'Lapak Nyoofresh' => 'Lapak Nyoofresh',
-                        'Diluar Nyoofresh' => 'Diluar Nyoofresh',
-                    ])
+                Forms\Components\Select::make('user_id')
+                    ->label('User - Jenis Lapak')
+                    ->relationship('user_produk', 'name', function ($query) {
+                        // Ambil user beserta relasi ke role
+                        $query->whereHas('roles', function ($query) {
+                            $query->whereIn('name', ['penjaga lapak', 'dropping']);
+                        });
+                    })
+                    ->getOptionLabelFromRecordUsing(function ($record) {
+                        $namaUser = $record->name;
+                        $roles = $record->roles->pluck('name')->join(', ');
+                
+                        $keterangan = match (true) {
+                            str_contains($roles, 'penjaga lapak') => 'Lapak Diiluar Nyoofresh',
+                            str_contains($roles, 'dropping') => 'Lapak Didalam Nyoofresh',
+                            default => '-',
+                        };
+                
+                        return "{$namaUser} - {$keterangan}";
+                    })
                     ->native(false)
-                    ->label('Jenis Lapak')
                     ->required(),
                 Forms\Components\TextInput::make('nama_produk')
                     ->label('Nama Produk')
@@ -134,7 +148,8 @@ class ProdukResource extends Resource
                 return Produk::query();
                 })
             ->columns([
-                Tables\Columns\TextColumn::make('lapak')
+                Tables\Columns\TextColumn::make('user_produk.name')
+                    ->label('Lapak')
                     ->numeric()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('user.name')

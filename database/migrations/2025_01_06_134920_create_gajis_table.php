@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pengeluarans', function (Blueprint $table) {
+        Schema::create('gajis', function (Blueprint $table) {
             $table->id();
-            $table->date('tanggal_pengeluaran');
-            $table->string('keperluan');
-            $table->integer('jumlah_keperluan');
-            $table->integer('harga');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel 'users'
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('bulan'); 
+            $table->integer('tahun'); 
+            $table->decimal('gaji', 10, 2); 
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pengeluarans');
+        Schema::dropIfExists('gajis');
     }
 };

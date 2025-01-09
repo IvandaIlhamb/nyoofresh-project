@@ -103,6 +103,9 @@ class PengeluaranResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->query(function (Builder $query) {
+                return Pengeluaran::query()->where('user_id', auth()->user()->id);
+                })
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal_pengeluaran')
                     ->default(Carbon::now()->isoformat('D MMMM Y'))

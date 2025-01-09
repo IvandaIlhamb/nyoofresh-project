@@ -13,6 +13,7 @@ class HasilPenjualan extends Model
         'id',
         'tanggal', 
         'id_suplai',
+        'user_id',
         'produk_id',
         'terjual',
         'kembali',
@@ -27,6 +28,10 @@ class HasilPenjualan extends Model
     {
         return $this->belongsTo(Produk::class, 'produk_id', 'id');
     }
+    public function user(): HasMany
+    {
+        return $this->hasMany(User::class, 'id', 'user_id');
+    }
     protected static function boot()
     {
         parent::boot();
@@ -40,6 +45,12 @@ class HasilPenjualan extends Model
             $model->kembali = $suplai - $terjual;
         });
         
+    }
+    public static function totalKeuntunganBulanTahun($bulan, $tahun)
+    {
+        return self::whereMonth('tanggal', $bulan)
+            ->whereYear('tanggal', $tahun)
+            ->sum('keuntungan');
     }
 
 

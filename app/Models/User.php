@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -45,9 +46,21 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Produk::class, 'supplier_id');
     }
+    public function hasil(): BelongsTo
+    {
+        return $this->belongsTo(HasilPenjualan::class, 'user_id');
+    }
+    public function user_produk(): BelongsTo
+    {
+        return $this->belongsTo(Produk::class, 'user_id');
+    }
     public function pengeluaran(): BelongsTo
     {
         return $this->belongsTo(Produk::class, 'penjaga_id');
+    }
+    public function gaji(): HasMany
+    {
+        return $this->hasMany(Gaji::class);
     }
     protected static function booted()
     {

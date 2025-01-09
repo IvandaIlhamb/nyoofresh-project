@@ -20,6 +20,7 @@ class Produk extends Model
         'harga_kulak',
         'is_active',        
         'supplier_id',
+        'user_id',
         'harga_jual',
         'foto_produk'
     ];
@@ -34,6 +35,10 @@ class Produk extends Model
     public function user(): HasMany
     {
         return $this->hasMany(User::class, 'id', 'supplier_id');
+    }
+    public function user_produk(): HasMany
+    {
+        return $this->hasMany(User::class, 'id', 'user_id');
     }
     // protected static function booted()
     // {

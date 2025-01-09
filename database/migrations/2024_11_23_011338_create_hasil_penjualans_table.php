@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('tanggal')->nullable(); // Kolom untuk menyimpan tanggal 
             $table->foreignId('id_suplai')->constrained('suplais')->onDelete('cascade')->nullable(); 
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->nullable(); 
             $table->integer('terjual')->nullable(); 
             $table->integer('kembali')->nullable(); 
             $table->integer('keuntungan')->nullable(); 

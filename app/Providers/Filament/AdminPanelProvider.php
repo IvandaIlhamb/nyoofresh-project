@@ -24,6 +24,7 @@ use App\Filament\Pages\HomePageSettings;
 use App\Filament\Resources\CategoryResource;
 use App\Filament\Resources\DroppingResource;
 use App\Filament\Resources\GajiModalPengeluaranResource;
+use App\Filament\Resources\GajiResource;
 use App\Filament\Resources\HasilPenjualanResource;
 use App\Filament\Resources\MonitoringRekapDroppingResource;
 use App\Filament\Resources\MonitoringRekapLapakNyoofreshResource;
@@ -33,6 +34,7 @@ use App\Filament\Resources\ProdukResource;
 use App\Filament\Resources\RekapPenjualanResource;
 use App\Filament\Resources\SuplaiResource;
 use App\Filament\Resources\UserResource;
+use App\Models\Gaji;
 use Filament\Navigation\NavigationBuilder;
 use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
@@ -118,6 +120,7 @@ class AdminPanelProvider extends PanelProvider
                             NavigationGroup::make('Keuangan')
                                 ->items([
                                     ...GajiModalPengeluaranResource::getNavigationItems(),
+                                    ...GajiResource::getNavigationItems(),
                                     ...PemasukanResource::getNavigationItems(),
                                     ...PengeluaranResource::getNavigationItems(),
                                 ]),       

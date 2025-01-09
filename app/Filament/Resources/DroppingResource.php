@@ -60,14 +60,20 @@ class DroppingResource extends Resource
         return $table
         ->query(function (Builder $query) {
             $user = auth()->user();
-            if($user->hasRole('dropping')){
+        
+            if ($user && $user->hasRole('dropping')) {
                 return Suplai::query()
-                ->whereHas('produk', function ($query) {
-                    $query->where('lapak', 'Diluar Nyoofresh');
-                });
+                    ->whereHas('produk', function ($query) {
+                        $query->whereHas('user_produk', function ($query) {
+                            $query->whereHas('roles', function ($query) {
+                                $query->where('name', 'dropping');
+                            });
+                        });
+                    });
             }
+        
             return Suplai::query();
-            })
+        })
         ->columns([
             Tables\Columns\TextColumn::make('suplai.tanggal')
                 ->getStateUsing(fn ($record) => 

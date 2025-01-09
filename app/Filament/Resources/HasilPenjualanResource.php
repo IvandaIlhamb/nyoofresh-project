@@ -14,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class HasilPenjualanResource extends Resource
@@ -55,7 +56,7 @@ class HasilPenjualanResource extends Resource
         $user = auth()->user();
 
         // Jika role adalah supplier, maka tidak bisa mengedit
-        if ($user->hasRole('supplier')) {
+        if ($user && $user->hasRole('supplier')) {
             return false;
         }
 
@@ -98,6 +99,12 @@ class HasilPenjualanResource extends Resource
                 Forms\Components\TextInput::make('keuntungan')
                     ->label('Keuntungan')
                     ->disabled(),
+                Forms\Components\Hidden::make('user_id')
+                    ->afterStateHydrated(function (\Filament\Forms\Set $set) {
+                        $set('user_id', auth()->id());
+                    })
+                    ->reactive()
+                    ->required(),
             ]);
     }
     
@@ -110,14 +117,22 @@ class HasilPenjualanResource extends Resource
                     return HasilPenjualan::query()
                     ->whereHas('suplai', function ($query) {
                         $query->whereHas('produk', function ($query) {
-                            $query->where('lapak', 'Diluar Nyoofresh');
+                            $query->whereHas('user_produk', function ($query) {
+                                $query->whereHas('roles', function ($query) {
+                                    $query->where('name', 'dropping');
+                                });
+                            });
                         });
                     });
                 }elseif($user->hasRole('penjaga lapak')){
                     return HasilPenjualan::query()
                     ->whereHas('suplai', function ($query) {
                         $query->whereHas('produk', function ($query) {
-                            $query->where('lapak', 'Lapak Nyoofresh');
+                            $query->whereHas('user_produk', function ($query) {
+                                $query->whereHas('roles', function ($query) {
+                                    $query->where('name', 'penjaga lapak');
+                                });
+                            });
                         });
                     });
                 }elseif($user->hasRole('supplier')){

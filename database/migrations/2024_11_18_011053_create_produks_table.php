@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('produks', function (Blueprint $table) {
             $table->id(); // Primary key
             $table->tinyInteger('is_active')->default(0);
-            $table->string('lapak')->default('default_value'); // Kolom untuk pilihan lapak
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel 'produks'
             $table->foreignId('supplier_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel 'produks'
             $table->string('nama_produk')->default('Nama Produk Default'); // Nama produk
             $table->text('deskripsi')->nullable(); // Deskripsi produk (opsional)
