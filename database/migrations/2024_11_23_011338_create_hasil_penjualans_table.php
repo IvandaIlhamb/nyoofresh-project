@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('hasil_penjualans', function (Blueprint $table) {
             $table->id();
             $table->date('tanggal')->nullable(); // Kolom untuk menyimpan tanggal 
-            $table->foreignId('id_suplai')->constrained('suplais')->onDelete('cascade')->nullable(); 
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->nullable(); 
+            $table->foreignId('id_suplai')->constrained('suplais')->onDelete('cascade')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('terjual')->nullable(); 
             $table->integer('kembali')->nullable(); 
             $table->integer('keuntungan')->nullable(); 

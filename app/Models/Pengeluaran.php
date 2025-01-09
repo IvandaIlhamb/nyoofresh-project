@@ -13,12 +13,12 @@ class Pengeluaran extends Model
         'tanggal_pengeluaran', 
         'keperluan',
         'jumlah_keperluan',
-        'penjaga_id',
+        'user_id',
         'harga'
     ];
 
     public function user(): HasMany
     {
-        return $this->hasMany(User::class, 'id', 'penjaga_id');
+        return $this->hasMany(User::class, 'id', 'user_id');
     }
 }

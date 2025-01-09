@@ -94,7 +94,7 @@ class PengeluaranResource extends Resource
                     ->label('Harga')
                     ->integer()
                     ->required(),
-                Forms\Components\Hidden::make('penjaga_id')
+                Forms\Components\Hidden::make('user_id')
                     ->default(auth()->id())
                     ->required(),
             ]);

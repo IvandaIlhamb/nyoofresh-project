@@ -56,7 +56,7 @@ class User extends Authenticatable
     }
     public function pengeluaran(): BelongsTo
     {
-        return $this->belongsTo(Produk::class, 'penjaga_id');
+        return $this->belongsTo(Produk::class, 'user_id');
     }
     public function gaji(): HasMany
     {
