@@ -157,12 +157,12 @@ class PemasukanResource extends Resource
                 //     Tables\Columns\TextColumn::make('email'),
                 // ]),
             ])
-            ->content(function () use ($totalKeuntungan) {
+            // ->content(function () use ($totalKeuntungan) {
         
-                return view('collapsible-row-content', [
-                    'totalKeuntungan' => $totalKeuntungan,
-                ]);
-            })
+            //     return view('collapsible-row-content', [
+            //         'totalKeuntungan' => $totalKeuntungan,
+            //     ]);
+            // })
             ->filters([
                 //
             ])
