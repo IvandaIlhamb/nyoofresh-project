@@ -104,7 +104,11 @@ class PengeluaranResource extends Resource
     {
         return $table
             ->query(function (Builder $query) {
-                return Pengeluaran::query()->where('user_id', auth()->user()->id);
+                $user = auth()->user();
+                if ($user->hasRole('admin')) {
+                    return Pengeluaran::query();
+                }
+                return Pengeluaran::query()->where('user_id', $user->id);
                 })
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal_pengeluaran')
@@ -118,7 +122,7 @@ class PengeluaranResource extends Resource
                     ->label('Total Harga')
                     ->money('IDR', locale: 'id'),
                 Tables\Columns\TextColumn::make('user.name')
-                    ->label('Nama Penjaga')
+                    ->label('Nama Akun')
                     ->visible(fn () => auth()->user()->hasRole('admin')),
             ])
             ->filters([
