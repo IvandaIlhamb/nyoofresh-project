@@ -86,8 +86,8 @@ class ProdukResource extends Resource
                         $roles = $record->roles->pluck('name')->join(', ');
                 
                         $keterangan = match (true) {
-                            str_contains($roles, 'penjaga lapak') => 'Lapak Diiluar Nyoofresh',
-                            str_contains($roles, 'dropping') => 'Lapak Didalam Nyoofresh',
+                            str_contains($roles, 'penjaga lapak') => 'Lapak Didalam Nyoofresh',
+                            str_contains($roles, 'dropping') => 'Lapak Diluar Nyoofresh',
                             default => '-',
                         };
                 

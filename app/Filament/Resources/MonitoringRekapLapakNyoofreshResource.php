@@ -66,7 +66,11 @@ class MonitoringRekapLapakNyoofreshResource extends Resource
             return HasilPenjualan::query()
             ->whereHas('suplai', function ($query) {
                 $query->whereHas('produk', function ($query) {
-                    $query->where('lapak', 'Lapak Nyoofresh');
+                    $query->whereHas('user_produk', function ($query) {
+                        $query->whereHas('roles', function ($query) {
+                            $query->where('name', 'penjaga lapak');
+                        });
+                    });
                 });
             });
         return HasilPenjualan::query();

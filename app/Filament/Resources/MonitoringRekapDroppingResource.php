@@ -67,7 +67,11 @@ class MonitoringRekapDroppingResource extends Resource
                     return HasilPenjualan::query()
                     ->whereHas('suplai', function ($query) {
                         $query->whereHas('produk', function ($query) {
-                            $query->where('lapak', 'Diluar Nyoofresh');
+                            $query->whereHas('user_produk', function ($query) {
+                                $query->whereHas('roles', function ($query) {
+                                    $query->where('name', 'dropping');
+                                });
+                            });
                         });
                     });
                 return HasilPenjualan::query();
