@@ -48,11 +48,12 @@ class PengaturanResource extends Resource
                     ->revealable()
                     ->required(fn () => request()->routeIs('filamin.users.create'))
                     ->maxLength(255),
-                // Forms\Components\Select::make('roles')
-                //     ->relationship(name: 'roles', titleAttribute: 'name')
-                //     ->searchable()
-                //     ->multiple()
-                //     ->preload(),
+                Forms\Components\Select::make('roles')
+                    ->relationship(name: 'roles', titleAttribute: 'name')
+                    ->searchable()
+                    ->disabled()
+                    ->multiple()
+                    ->preload(),
             ]);
     }
 
