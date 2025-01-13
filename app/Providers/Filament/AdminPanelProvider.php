@@ -29,6 +29,7 @@ use App\Filament\Resources\HasilPenjualanResource;
 use App\Filament\Resources\MonitoringRekapDroppingResource;
 use App\Filament\Resources\MonitoringRekapLapakNyoofreshResource;
 use App\Filament\Resources\PemasukanResource;
+use App\Filament\Resources\PengaturanResource;
 use App\Filament\Resources\PengeluaranResource;
 use App\Filament\Resources\ProdukResource;
 use App\Filament\Resources\RekapPenjualanResource;
@@ -51,8 +52,11 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => '#344CB7',
             ])
+            ->brandLogo(asset('logo.png'))
+            ->brandLogoHeight('3rem')
+            ->favicon(asset('logo.png'))
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -105,6 +109,10 @@ class AdminPanelProvider extends PanelProvider
                                 ...GajiModalPengeluaranResource::getNavigationItems(),
                                 ...PemasukanResource::getNavigationItems(),
                                 ...PengeluaranResource::getNavigationItems(),
+                            ]),
+                        NavigationGroup::make('Pengaturan')
+                            ->items([
+                                ...PengaturanResource::getNavigationItems(),
                             ]),
                         ]
                         : [

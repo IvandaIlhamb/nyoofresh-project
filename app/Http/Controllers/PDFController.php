@@ -14,7 +14,11 @@ class PDFController extends Controller
         $hasilPenjualan = HasilPenjualan::query()
         ->whereHas('suplai', function ($query) {
             $query->whereHas('produk', function ($query) {
-                $query->where('lapak', 'Diluar Nyoofresh');
+                $query->whereHas('user_produk', function ($query) {
+                    $query->whereHas('roles', function ($query) {
+                        $query->where('name', 'dropping');
+                    });
+                });
             });
         })->get();
 
@@ -44,7 +48,11 @@ class PDFController extends Controller
         $hasilPenjualan = HasilPenjualan::query()
         ->whereHas('suplai', function ($query) {
             $query->whereHas('produk', function ($query) {
-                $query->where('lapak', 'Lapak Nyoofresh');
+                $query->whereHas('user_produk', function ($query) {
+                    $query->whereHas('roles', function ($query) {
+                        $query->where('name', 'penjaga lapak');
+                    });
+                });
             });
         })->get();
 
