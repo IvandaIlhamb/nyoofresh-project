@@ -106,7 +106,7 @@ class AdminPanelProvider extends PanelProvider
                             ]),
                         NavigationGroup::make('Keuangan')
                             ->items([
-                                ...GajiModalPengeluaranResource::getNavigationItems(),
+                                // ...GajiModalPengeluaranResource::getNavigationItems(),
                                 ...PemasukanResource::getNavigationItems(),
                                 ...PengeluaranResource::getNavigationItems(),
                             ]),
@@ -127,7 +127,7 @@ class AdminPanelProvider extends PanelProvider
                             ]),
                             NavigationGroup::make('Keuangan')
                                 ->items([
-                                    ...GajiModalPengeluaranResource::getNavigationItems(),
+                                    // ...GajiModalPengeluaranResource::getNavigationItems(),
                                     ...GajiResource::getNavigationItems(),
                                     ...PemasukanResource::getNavigationItems(),
                                     ...PengeluaranResource::getNavigationItems(),
