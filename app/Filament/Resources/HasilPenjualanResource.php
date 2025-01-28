@@ -100,9 +100,9 @@ class HasilPenjualanResource extends Resource
                     ->label('Keuntungan')
                     ->disabled(),
                 Forms\Components\Hidden::make('user_id')
-                    ->afterStateHydrated(function (\Filament\Forms\Set $set) {
-                        $set('user_id', auth()->id());
-                    })
+                    ->afterStateHydrated(function (\Filament\Forms\Set $set, $state) {
+                        $set('user_id', $state->suplai->produk->user_id ?? null);
+                    })                
                     ->reactive()
                     ->required(),
             ]);
@@ -114,7 +114,7 @@ class HasilPenjualanResource extends Resource
             ->query(function (Builder $query) {
                 $user = auth()->user();
                 if($user->hasRole('dropping')){
-                    return HasilPenjualan::query()
+                    return HasilPenjualan::query()->where('user_id', $user->id)
                     ->whereHas('suplai', function ($query) {
                         $query->whereHas('produk', function ($query) {
                             $query->whereHas('user_produk', function ($query) {
@@ -125,7 +125,7 @@ class HasilPenjualanResource extends Resource
                         });
                     });
                 }elseif($user->hasRole('penjaga lapak')){
-                    return HasilPenjualan::query()
+                    return HasilPenjualan::query()->where('user_id', $user->id)
                     ->whereHas('suplai', function ($query) {
                         $query->whereHas('produk', function ($query) {
                             $query->whereHas('user_produk', function ($query) {
@@ -136,12 +136,12 @@ class HasilPenjualanResource extends Resource
                         });
                     });
                 }elseif($user->hasRole('supplier')){
-                    return HasilPenjualan::query()
+                    return HasilPenjualan::query()->where('user_id', $user->id)
                     ->whereHas('suplai', function ($query) {
                         $query->where('nama_supplier', auth()->user()->name);
                         });
                 }
-                return HasilPenjualan::query();
+                return HasilPenjualan::query()->where('user_id', $user->id);
                 })
             ->columns([
                 Tables\Columns\TextColumn::make('tanggal')

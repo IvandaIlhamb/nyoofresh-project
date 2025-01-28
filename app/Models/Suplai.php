@@ -43,9 +43,18 @@ class Suplai extends Model
     {
         static::saved(function ($suplai) {
             // $produk = Produk::first();
-            HasilPenjualan::updateOrCreate(
-                ['id_suplai' => $suplai->id]
-            );
+                $produk = $suplai->produk;
+
+            if ($produk) {
+                HasilPenjualan::updateOrCreate(
+                    [
+                        'id_suplai' => $suplai->id, 
+                    ],
+                    [
+                        'user_id' => $produk->user_id, 
+                    ]
+                );
+            }
         });
     }
 }
