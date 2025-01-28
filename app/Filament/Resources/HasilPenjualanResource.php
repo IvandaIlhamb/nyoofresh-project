@@ -100,9 +100,9 @@ class HasilPenjualanResource extends Resource
                     ->label('Keuntungan')
                     ->disabled(),
                 Forms\Components\Hidden::make('user_id')
-                    ->afterStateHydrated(function (\Filament\Forms\Set $set, $state) {
-                        $set('user_id', $state->suplai->produk->user_id ?? null);
-                    })                
+                    ->afterStateHydrated(function (\Filament\Forms\Set $set) {
+                        $set('user_id', auth()->id());
+                    })              
                     ->reactive()
                     ->required(),
             ]);
