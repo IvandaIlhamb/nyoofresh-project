@@ -115,8 +115,17 @@ class SuplaiResource extends Resource
                         $query->where('supplier_id', auth()->user()->id)
                         ->where('is_active', 1);
                     })
+                    ->options(function () {
+                        return \App\Models\Produk::where('supplier_id', auth()->user()->id)
+                            ->where('is_active', 1)
+                            ->with('user_produk') // Pastikan relasi user di-load
+                            ->get()
+                            ->mapWithKeys(function ($produk) {
+                                return [$produk->id => $produk->user_produk->name . ' - ' . $produk->nama_produk];
+                            });
+                    })
                     ->placeholder('Tidak Ada Suplai Produk')
-                    ->label('Nama Produk')
+                    ->label('User - Nama Produk')
                     ->disabled(fn (callable $get) => $get('status') === StatusToko::Tutup),
                 Forms\Components\Select::make('id_produk')
                     ->relationship('produk', 'harga_jual', function (\Illuminate\Database\Eloquent\Builder $query) {
@@ -171,6 +180,9 @@ class SuplaiResource extends Resource
                     ->visible(fn () => auth()->user()->can('activated-suplai')),
                 Tables\Columns\TextColumn::make('produk.nama_produk')
                     ->label('Nama Produk')
+                    ->default('-'),
+                Tables\Columns\TextColumn::make('produk.user_produk.name')
+                    ->label('User')
                     ->default('-'),
                     // ->visible(fn ($record) => auth()->user()->can('view-suplai')),
                 Tables\Columns\TextColumn::make('jumlah_suplai')

@@ -50,9 +50,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(HasilPenjualan::class, 'user_id');
     }
-    public function user_produk(): BelongsTo
+    public function user_produk(): HasMany
     {
-        return $this->belongsTo(Produk::class, 'user_id');
+        return $this->hasMany(Produk::class, 'user_id');
     }
     public function pengeluaran(): BelongsTo
     {

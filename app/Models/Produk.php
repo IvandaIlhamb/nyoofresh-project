@@ -17,6 +17,7 @@ class Produk extends Model
         'lapak',
         'nama_produk',
         'deskripsi',
+        'kategori',
         'harga_kulak',
         'is_active',        
         'supplier_id',
@@ -36,9 +37,9 @@ class Produk extends Model
     {
         return $this->hasMany(User::class, 'id', 'supplier_id');
     }
-    public function user_produk(): HasMany
+    public function user_produk(): BelongsTo
     {
-        return $this->hasMany(User::class, 'id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
     // protected static function booted()
     // {

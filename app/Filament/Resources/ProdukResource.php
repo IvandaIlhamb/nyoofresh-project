@@ -98,6 +98,14 @@ class ProdukResource extends Resource
                 Forms\Components\TextInput::make('nama_produk')
                     ->label('Nama Produk')
                     ->required(),
+                Forms\Components\Select::make('kategori')
+                    ->label('Kategori Produk')
+                    ->options([
+                        'Buah' => 'Buah',
+                        'Sayur' => 'Sayur',
+                        'Alat Rumah Tangga' => 'Alat Rumah Tangga',
+                    ])
+                    ->required(),
                 Forms\Components\TextArea::make('deskripsi')
                     ->label('Deskripsi Produk'),
                 Forms\Components\TextInput::make('harga_kulak')
@@ -172,6 +180,9 @@ class ProdukResource extends Resource
                     ->visible(fn () => auth()->user()->can('acc-produk')),
                 Tables\Columns\TextColumn::make('nama_produk')
                     ->label('Nama Produk')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('kategori')
+                    ->label('Kategori Produk')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('deskripsi')
                     ->label('Deskripsi Produk')

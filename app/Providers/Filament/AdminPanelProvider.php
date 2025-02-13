@@ -34,6 +34,7 @@ use App\Filament\Resources\PengeluaranResource;
 use App\Filament\Resources\ProdukResource;
 use App\Filament\Resources\RekapPenjualanResource;
 use App\Filament\Resources\SuplaiResource;
+use App\Filament\Resources\UserManualResource;
 use App\Filament\Resources\UserResource;
 use App\Models\Gaji;
 use Filament\Navigation\NavigationBuilder;
@@ -113,6 +114,7 @@ class AdminPanelProvider extends PanelProvider
                         NavigationGroup::make('Pengaturan')
                             ->items([
                                 ...PengaturanResource::getNavigationItems(),
+                                ...UserManualResource::getNavigationItems(),
                             ]),
                         ]
                         : [

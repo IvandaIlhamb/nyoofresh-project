@@ -6,6 +6,10 @@
 /storage/*.key
 /storage/pail
 /vendor
+server.php
+nyoofresh-project.zip
+public-zip
+.env.txt
 .env
 .env.backup
 .env.production

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel 'produks'
             $table->foreignId('supplier_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel 'produks'
             $table->string('nama_produk')->default('Nama Produk Default'); // Nama produk
+            $table->string('kategori')->default('Nama Produk Default'); // Nama produk
             $table->text('deskripsi')->nullable(); // Deskripsi produk (opsional)
             $table->decimal('harga_kulak', 10, 2); // Harga kulak dengan format desimal
             $table->decimal('harga_jual', 10, 2); // Harga jual dengan format desimal
