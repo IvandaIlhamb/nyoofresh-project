@@ -23,13 +23,13 @@ class UserManualResource extends Resource
     {
         $user = auth()->user();
         if ($user->hasRole('admin')) {
-            return asset('storage/user-manual-admin.pdf');
+            return asset('user-manual-admin.pdf');
         } elseif ($user->hasRole('penjaga lapak')) {
-            return asset('storage/user-manual-penjagalapak.pdf');
+            return asset('user-manual-penjagalapak.pdf');
         }elseif ($user->hasRole('dropping')) {
-            return asset('storage/user-manual-dropping.pdf');
+            return asset('user-manual-dropping.pdf');
         }elseif ($user->hasRole('supplier')) {
-            return asset('storage/user-manual-supplier.pdf');
+            return asset('user-manual-supplier.pdf');
         }
  
     }
