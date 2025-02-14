@@ -179,6 +179,9 @@ return [
         'data.terjual' => [
             'lte' => 'Jumlah terjual tidak boleh melebihi jumlah suplai.',
         ],
+        'data.jumlah_suplai' => [
+            'gt' => 'Edit jumlah suplai produk harus lebih dari jumlah suplai produk yang ada sekarang.',
+        ],
     ],
 
     /*

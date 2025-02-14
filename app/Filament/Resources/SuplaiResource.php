@@ -17,6 +17,7 @@ use App\Filament\Resources\SuplaiResource\RelationManagers;
 use Filament\Forms\Components\Select;
 use Carbon\Carbon;
 use App\Enums\StatusToko;
+use Illuminate\Http\Request;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -86,6 +87,11 @@ class SuplaiResource extends Resource
         else
             return false;
     }
+    protected function getRedirectUrl(): string
+    {       
+        return static::getResource()::getUrl('index');
+    }
+    
     public static function form(Form $form): Form
     {
         return $form
@@ -126,15 +132,23 @@ class SuplaiResource extends Resource
                     })
                     ->placeholder('Tidak Ada Suplai Produk')
                     ->label('User - Nama Produk')
-                    ->disabled(fn (callable $get) => $get('status') === StatusToko::Tutup),
-                Forms\Components\Select::make('id_produk')
-                    ->relationship('produk', 'harga_jual', function (\Illuminate\Database\Eloquent\Builder $query) {
-                        $query->where('supplier_id', auth()->user()->id)
-                        ->where('is_active', 1);
-                    })
-                    ->placeholder('Tidak Ada Suplai Produk')
+                    ->disabled(fn (callable $get) => $get('status') === StatusToko::Tutup)
+                    ->reactive()
+                    ->afterStateUpdated(fn ($state, callable $set) => 
+                        $set('harga_jual', \App\Models\Produk::find($state)?->harga_jual)),
+                // Forms\Components\Select::make('id_produk')
+                //     ->relationship('produk', 'harga_jual', function (\Illuminate\Database\Eloquent\Builder $query) {
+                //         $query->where('supplier_id', auth()->user()->id)
+                //         ->where('is_active', 1);
+                //     })
+                //     ->placeholder('Tidak Ada Suplai Produk')
+                //     ->label('Harga Jual')
+                //     ->disabled(),
+                Forms\Components\TextInput::make('harga_jual')
                     ->label('Harga Jual')
-                    ->disabled(),
+                    ->disabled()
+                    ->dehydrated(false) // Supaya tidak dikirim sebagai input
+                    ->default(fn (callable $get) => \App\Models\Produk::find($get('id_produk'))?->harga_jual),
                 Forms\Components\TextInput::make('jumlah_suplai')
                     ->numeric()
                     ->label('Jumlah Produk')

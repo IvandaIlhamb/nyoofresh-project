@@ -52,6 +52,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->resources([
+                SuplaiResource::class, // Pastikan resource ini terdaftar
+            ])
             ->colors([
                 'primary' => '#344CB7',
             ])
