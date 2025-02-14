@@ -158,6 +158,8 @@ class AdminPanelProvider extends PanelProvider
                                             'filament.admin.resources.permission.edit',
                                         ]))
                                         ->url(fn():string=> '/admin/permissions'),
+                                ...UserManualResource::getNavigationItems(),
+
                                 ]),
                             ])
                     ]);
